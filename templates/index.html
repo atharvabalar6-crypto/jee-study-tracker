@@ -668,6 +668,22 @@
         </div>
       </div>
 
+      <!-- Subtopic / Page Selector Tabs (for chapters with multiple sheets like Quadratic Equations Pages 1-6) -->
+      <div id="notesPageTabBar" class="px-3 sm:px-4 py-2 bg-slate-900 border-b border-slate-800 flex items-center justify-between gap-2 overflow-x-auto no-print hidden">
+        <div class="flex items-center gap-1.5 overflow-x-auto py-0.5" id="notesPageTabsContainer">
+          <!-- Populated dynamically with Page tabs -->
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0 pl-2 border-l border-slate-800">
+          <button id="btnPrevSheet" onclick="navigateNoteSheet(-1)" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-slate-700 transition flex items-center gap-1">
+            <span>← Prev</span>
+          </button>
+          <span id="notesPageIndicator" class="text-xs text-amber-400 font-mono font-bold px-1.5">Page 1 of 6</span>
+          <button id="btnNextSheet" onclick="navigateNoteSheet(1)" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-slate-700 transition flex items-center gap-1">
+            <span>Next →</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Notes Modal Scrollable Body (Lined Notebook Sheet Theme) -->
       <div id="notesModalBody" class="p-4 sm:p-6 overflow-y-auto flex-1 theme-notebook transition-colors duration-200">
         

@@ -345,13 +345,15 @@ async function openNotesModal(chapterName) {
     }
 
     currentLoadedNote = n;
-    document.getElementById("notesSubjectBadge").innerText = n.subject;
-    document.getElementById("notesNcertBadge").innerText = (n.ncert_ref || "").split(":")[0];
-    document.getElementById("notesImportanceBadge").innerText = n.importance;
-    document.getElementById("notesChapterTitle").innerText = `${n.chapter} • Short Notes & Cheat-Sheet`;
+    const sheets = (n.sheets && n.sheets.length > 0) ? n.sheets : [n];
+    window.currentNoteSheets = sheets;
+    window.currentNoteSheetIndex = 0;
 
-    // Render the authentic 9-section Notebook Sheet matching the user's photo
-    renderNotebookSheet(n, chapterName);
+    // Setup Multi-Sheet Tabs (e.g. Page 1-6 for Quadratic, Page 1-3 for others)
+    setupNotePageTabs(sheets);
+
+    // Render active sheet
+    renderActiveNoteSheet();
 
     // Action buttons to take tests directly on this chapter
     const btnTest = document.getElementById("btnNotesTakeTest");
@@ -376,6 +378,113 @@ async function openNotesModal(chapterName) {
     console.error("Error loading notes:", err);
     alert("Failed to load notes. Please check connection.");
   }
+}
+
+function setupNotePageTabs(sheets) {
+  const tabBar = document.getElementById("notesPageTabBar");
+  const container = document.getElementById("notesPageTabsContainer");
+
+  if (!tabBar || !container) return;
+
+  if (!sheets || sheets.length <= 1) {
+    tabBar.classList.add("hidden");
+    return;
+  }
+
+  tabBar.classList.remove("hidden");
+  container.innerHTML = sheets.map((s, idx) => {
+    const isAct = idx === 0;
+    const title = s.sheet_title || `Sheet ${idx + 1}`;
+    const pageNum = s.page_number || (idx + 1);
+    return `
+      <button type="button" onclick="switchNoteSheet(${idx})" 
+        class="note-sheet-tab px-3 py-1 text-xs rounded-lg font-semibold transition border whitespace-nowrap flex items-center gap-1.5 ${isAct ? 'bg-amber-400 text-slate-950 font-bold border-amber-300 shadow-sm' : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 border-slate-700'}"
+        data-sheet-idx="${idx}">
+        <span class="opacity-80 font-mono text-[11px] font-bold">P${pageNum}</span>
+        <span class="truncate max-w-[170px]">${title}</span>
+      </button>
+    `;
+  }).join("");
+
+  updatePageNavigationControls();
+}
+
+function updatePageNavigationControls() {
+  const sheets = window.currentNoteSheets || [];
+  const idx = window.currentNoteSheetIndex || 0;
+  const indicator = document.getElementById("notesPageIndicator");
+  const btnPrev = document.getElementById("btnPrevSheet");
+  const btnNext = document.getElementById("btnNextSheet");
+
+  if (indicator) {
+    indicator.innerText = `Page ${idx + 1} of ${sheets.length}`;
+  }
+  if (btnPrev) {
+    btnPrev.disabled = (idx <= 0);
+    btnPrev.classList.toggle("opacity-40", idx <= 0);
+    btnPrev.classList.toggle("cursor-not-allowed", idx <= 0);
+  }
+  if (btnNext) {
+    btnNext.disabled = (idx >= sheets.length - 1);
+    btnNext.classList.toggle("opacity-40", idx >= sheets.length - 1);
+    btnNext.classList.toggle("cursor-not-allowed", idx >= sheets.length - 1);
+  }
+
+  const tabs = document.querySelectorAll(".note-sheet-tab");
+  tabs.forEach((t, i) => {
+    if (i === idx) {
+      t.className = "note-sheet-tab px-3 py-1 text-xs rounded-lg font-bold transition border whitespace-nowrap flex items-center gap-1.5 bg-amber-400 text-slate-950 border-amber-300 shadow-sm";
+      try { t.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' }); } catch(e) {}
+    } else {
+      t.className = "note-sheet-tab px-3 py-1 text-xs rounded-lg font-semibold transition border whitespace-nowrap flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 border-slate-700";
+    }
+  });
+}
+
+function switchNoteSheet(idx) {
+  const sheets = window.currentNoteSheets;
+  if (!sheets || idx < 0 || idx >= sheets.length) return;
+  window.currentNoteSheetIndex = idx;
+  updatePageNavigationControls();
+  renderActiveNoteSheet();
+}
+
+function navigateNoteSheet(delta) {
+  const cur = window.currentNoteSheetIndex || 0;
+  switchNoteSheet(cur + delta);
+}
+
+function renderActiveNoteSheet() {
+  const sheets = window.currentNoteSheets || [];
+  const idx = window.currentNoteSheetIndex || 0;
+  const sheet = sheets[idx] || currentLoadedNote;
+  if (!sheet) return;
+
+  const n = currentLoadedNote || sheet;
+  const total = sheets.length;
+
+  const subjBadge = document.getElementById("notesSubjectBadge");
+  if (subjBadge) subjBadge.innerText = sheet.subject || n.subject || "";
+  const ncertBadge = document.getElementById("notesNcertBadge");
+  if (ncertBadge) ncertBadge.innerText = (sheet.ncert_ref || n.ncert_ref || "").split(":")[0];
+  const impBadge = document.getElementById("notesImportanceBadge");
+  if (impBadge) impBadge.innerText = sheet.importance || n.importance || "";
+  const chapTitle = document.getElementById("notesChapterTitle");
+  if (chapTitle) {
+    const pageSub = total > 1 ? ` • Page ${idx + 1} of ${total}: ${sheet.sheet_title || ''}` : ` • Short Notes & Cheat-Sheet`;
+    chapTitle.innerText = `${sheet.chapter || n.chapter}${pageSub}`;
+  }
+
+  if (!sheet.formulas && n.formulas) {
+    sheet.formulas = n.formulas;
+  }
+
+  renderNotebookSheet(sheet, sheet.chapter || n.chapter);
+
+  const body = document.getElementById("notesModalBody");
+  if (body) body.scrollTop = 0;
+
+  renderMath();
 }
 
 function renderNotebookSheet(n, chapterName) {
@@ -480,6 +589,26 @@ function renderNotebookSheet(n, chapterName) {
           </div>
         ` : ''}
 
+        <!-- 4b. Special Cases & Identifications (when present) -->
+        ${n.special_cases ? `
+          <div class="space-y-2.5">
+            <span class="nb-pill-yellow">${n.special_cases.title || '4. Special Cases & Shortcut Identifications'}</span>
+            <div class="nb-box-interval space-y-1.5 text-xs text-indigo-950 dark:text-indigo-200 shadow-sm">
+              ${(n.special_cases.cases || []).map(cs => `
+                <div class="flex items-start gap-1.5">
+                  <span class="text-indigo-600 dark:text-indigo-400 font-bold shrink-0">•</span>
+                  <span>${cs}</span>
+                </div>
+              `).join("")}
+            </div>
+            ${n.special_cases.note ? `
+              <div class="p-2.5 rounded-xl bg-purple-100/70 dark:bg-purple-950/40 border border-purple-300 dark:border-purple-800 text-[11px] text-purple-900 dark:text-purple-300 font-normal leading-relaxed">
+                <strong>Note:</strong> ${n.special_cases.note}
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+
       </div>
 
       <!-- RIGHT COLUMN -->
@@ -558,7 +687,7 @@ function renderNotebookSheet(n, chapterName) {
               ${traps.map(tr => `
                 <li class="flex items-start gap-1.5">
                   <span class="text-amber-600 dark:text-amber-400 font-bold text-sm leading-none shrink-0">!</span>
-                  <span>${tr}</span>
+                  <span>${typeof tr === 'string' ? tr : `<strong>${tr.trap}</strong> ${tr.why ? '— ' + tr.why : ''} ${tr.remedy ? '<br/><span class="text-emerald-700 dark:text-emerald-400 font-semibold">Fix: ' + tr.remedy + '</span>' : ''}`}</span>
                 </li>
               `).join("")}
             </ul>
@@ -631,6 +760,11 @@ function renderNotebookSheet(n, chapterName) {
               <div class="text-xs sm:text-sm font-normal leading-relaxed">
                 <strong class="text-slate-900 dark:text-white">Problem:</strong> ${ex.problem}
               </div>
+              ${ex.approach ? `
+                <div class="text-xs text-indigo-900 dark:text-indigo-200 bg-indigo-50/80 dark:bg-indigo-950/40 p-2 rounded-lg border border-indigo-200 dark:border-indigo-900 font-medium">
+                  <strong>Approach / Method:</strong> ${ex.approach}
+                </div>
+              ` : ''}
               <div class="text-xs bg-slate-50 dark:bg-slate-950/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
                 <p class="text-indigo-800 dark:text-indigo-300 font-bold">Step-by-Step Method & Solution:</p>
                 <div class="leading-relaxed pl-2 whitespace-pre-line text-slate-700 dark:text-slate-300 font-normal">${ex.solution}</div>
@@ -654,9 +788,7 @@ function closeNotesModal() {
   if (sInput) sInput.value = "";
 }
 
-function copyNotesMarkdown() {
-  if (!currentLoadedNote) return;
-  const n = currentLoadedNote;
+function formatSingleSheetMarkdown(n) {
   let md = `# ヾ ${n.sheet_title || n.chapter} ﾉ\n\n`;
   md += `**Chapter:** ${n.ncert_ref || n.chapter} | **Subject:** ${n.subject} | **Class:** ${n.class_level}\n\n`;
   md += `## 1. Introduction\n${n.introduction || ''}\n\n`;
@@ -691,6 +823,14 @@ function copyNotesMarkdown() {
       md += `- **${cs.cond}:** ${cs.interval}\n`;
     });
     if (n.interval_rules.note) md += `\n*Note:* ${n.interval_rules.note}\n\n`;
+  }
+
+  if (n.special_cases) {
+    md += `## ${n.special_cases.title || '4. Special Cases'}\n`;
+    (n.special_cases.cases || []).forEach(cs => {
+      md += `- ${cs}\n`;
+    });
+    if (n.special_cases.note) md += `\n*Note:* ${n.special_cases.note}\n\n`;
   }
 
   if (n.graphical_view) {
@@ -729,7 +869,11 @@ function copyNotesMarkdown() {
   if (n.traps_and_pitfalls && n.traps_and_pitfalls.length > 0) {
     md += `## ⚠️ High-Frequency JEE Traps & Pitfalls\n`;
     n.traps_and_pitfalls.forEach(tr => {
-      md += `- ! ${tr}\n`;
+      if (typeof tr === 'string') {
+        md += `- ! ${tr}\n`;
+      } else {
+        md += `- ! **${tr.trap}** ${tr.why ? '— ' + tr.why : ''} ${tr.remedy ? '(Fix: ' + tr.remedy + ')' : ''}\n`;
+      }
     });
     md += `\n`;
   }
@@ -743,13 +887,27 @@ function copyNotesMarkdown() {
     n.examples.forEach(ex => {
       md += `### ${ex.title}\n`;
       md += `**Problem:** ${ex.problem}\n\n`;
+      if (ex.approach) md += `**Approach:** ${ex.approach}\n\n`;
       md += `**Method & Solution:**\n${ex.solution}\n\n`;
       if (ex.key_takeaway) md += `**Key Takeaway:** ${ex.key_takeaway}\n\n`;
     });
   }
 
-  navigator.clipboard.writeText(md).then(() => {
-    alert("Chapter Revision Notes copied to clipboard in clean Markdown format!");
+  return md;
+}
+
+function copyNotesMarkdown() {
+  if (!currentLoadedNote) return;
+  const sheets = window.currentNoteSheets;
+  let fullMd = "";
+  if (sheets && sheets.length > 1) {
+    fullMd = sheets.map((s, idx) => `<!-- PAGE ${idx + 1} OF ${sheets.length}: ${s.sheet_title || ''} -->\n` + formatSingleSheetMarkdown(s)).join("\n\n---\n\n");
+  } else {
+    fullMd = formatSingleSheetMarkdown(currentLoadedNote);
+  }
+
+  navigator.clipboard.writeText(fullMd).then(() => {
+    alert("Complete Chapter Cheat-Sheet Booklet copied to clipboard in clean Markdown format!");
   }).catch(() => {
     alert("Copied to clipboard!");
   });

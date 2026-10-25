@@ -7,6 +7,7 @@ Mnemonics & Worked Examples for All 96 NCERT Chapters.
 import re
 from database import get_connection
 from formula_bank import get_all_formulas
+from quadratic_notes_full import get_quadratic_full_notes
 
 # =========================================================================
 # 1. HELPER SVG VISUAL DIAGRAM GENERATORS
@@ -406,132 +407,9 @@ def generate_generic_coordinate_svg(subj):
 CURATED_NOTES = {
     # -------------------------------------------------------------
     # MATHEMATICS: Quadratic Equations & Expressions (NCERT Ch 5)
-    # EXACT MATCH TO USER'S UPLOADED HANDWRITTEN CHEAT-SHEET
+    # EXACT MATCH TO USER'S UPLOADED HANDWRITTEN 6-PAGE NOTEBOOK CHEAT-SHEET
     # -------------------------------------------------------------
-    "Quadratic Equations & Expressions": {
-        "chapter": "Quadratic Equations & Expressions",
-        "subject": "Mathematics",
-        "class_level": 11,
-        "ncert_ref": "Class 11, Chapter 5: Quadratic Equations & Expressions",
-        "importance": "Very High (Fundamental backbone for JEE Algebra & Calculus)",
-        "sheet_title": "Range & Location of Roots",
-        "mnemonic_banner": "Discriminant tells the nature... Coefficients tell the location...",
-        "classification_heading": "2. Range of Roots (Using Discriminant)",
-        "parameter_heading": "3. Location of Roots (With Respect to Origin)",
-        "important_points_heading": "6. Important Points",
-        "introduction": "For a quadratic equation $ax^2 + bx + c = 0$, the range and location of roots depend on the discriminant $D = b^2 - 4ac$ and the coefficients of the equation. The roots can be real, equal or non-real (complex), and they may lie in different intervals on the number line.",
-        "classification_cases": [
-            {
-                "badge": "(i) Real and Distinct Roots (D > 0)",
-                "title": "Real and Distinct Roots",
-                "condition": "D > 0",
-                "description": "Two distinct real roots, $x_1, x_2 \\in \\mathbb{R}$.",
-                "range": "x \\in (-\\infty, \\infty)",
-                "consequence": "Parabola cuts x-axis at two distinct points $\\alpha$ and $\\beta$."
-            },
-            {
-                "badge": "(ii) Real and Equal Roots (D = 0)",
-                "title": "Real and Equal Roots",
-                "condition": "D = 0",
-                "description": "Two equal real roots, $x_1 = x_2 = -\\frac{b}{2a}$.",
-                "range": "x \\in \\mathbb{R} \\text{ (a single contact point)}",
-                "consequence": "Parabola touches the x-axis at its vertex."
-            },
-            {
-                "badge": "(iii) Non-real (Complex) Roots (D < 0)",
-                "title": "Non-real (Complex) Roots",
-                "condition": "D < 0",
-                "description": "No real roots.",
-                "range": "x \\notin \\mathbb{R} \\text{ (complex conjugate pair)}",
-                "consequence": "Parabola lies entirely above ($a > 0$) or below ($a < 0$) the x-axis without cutting."
-            }
-        ],
-        "parameter_analysis": [
-            {
-                "sub_badge": "(i) Product of roots (\\alpha\\beta = c/a)",
-                "rules": [
-                    {"cond": "If c/a > 0", "res": "roots have same sign."},
-                    {"cond": "If c/a < 0", "res": "roots have opposite signs."},
-                    {"cond": "If c = 0", "res": "one root is 0."}
-                ]
-            },
-            {
-                "sub_badge": "(ii) Sum of roots (\\alpha+\\beta = -b/a)",
-                "rules": [
-                    {"cond": "If -b/a > 0", "res": "both roots are positive (when product > 0)."},
-                    {"cond": "If -b/a < 0", "res": "both roots are negative (when product > 0)."},
-                    {"cond": "If -b/a = 0", "res": "roots are opposite in sign (when product < 0)."}
-                ]
-            }
-        ],
-        "interval_rules": {
-            "title": "Interval Form (Using Roots)",
-            "premise": "If $\\alpha$ and $\\beta$ are the roots ($\\alpha < \\beta$), then:",
-            "cases": [
-                {"cond": "For D > 0", "interval": "x \\in (-\\infty, \\alpha] \\cup [\\beta, \\infty)"},
-                {"cond": "For D = 0", "interval": "x \\in (-\\infty, \\alpha] \\cup [\\alpha, \\infty) = \\mathbb{R}"},
-                {"cond": "For D < 0", "interval": "x \\notin \\mathbb{R} \\text{ (no real interval)}"}
-            ],
-            "note": "This gives the set of real values of x for which the quadratic expression is defined (or non-negative, depending on the question)."
-        },
-        "graphical_view": {
-            "title": "Location from Vertex (Graphical View)",
-            "vertex_formula": "For $y = ax^2 + bx + c$, vertex is $\\left(-\\frac{b}{2a}, -\\frac{D}{4a}\\right)$.",
-            "observations": [
-                "If $D > 0 \\implies$ parabola cuts x-axis at two points (roots real and distinct).",
-                "If $D = 0 \\implies$ parabola touches x-axis at vertex (equal roots).",
-                "If $D < 0 \\implies$ parabola does not cut x-axis (no real roots)."
-            ],
-            "svg_diagram": generate_math_quadratic_svg()
-        },
-        "important_points": [
-            "If $\\alpha$ and $\\beta$ are roots, then $\\alpha+\\beta = -\\frac{b}{a}$ and $\\alpha\\beta = \\frac{c}{a}$.",
-            "The roots are real $\\iff D \\ge 0$.",
-            "The roots are equal $\\iff D = 0$.",
-            "The roots are non-real (complex) $\\iff D < 0$.",
-            "The roots are in AP $\\iff 2\\alpha + 2\\beta = -\\frac{b}{a} \\implies \\alpha + \\beta = -\\frac{b}{2a}$.",
-            "The roots are in GP $\\iff \\alpha\\beta = \\frac{(\\alpha+\\beta)^2}{4} \\implies \\frac{c}{a} = \\left(-\\frac{b}{2a}\\right)^2$.",
-            "For a quadratic inequality, boundary points are the roots of the corresponding equation."
-        ],
-        "quick_tips": [
-            "Use $D = b^2 - 4ac$ to find nature and range of roots.",
-            "Use $\\alpha+\\beta = -\\frac{b}{a}, \\alpha\\beta = \\frac{c}{a}$ for sign and location.",
-            "Use vertex $\\left(-\\frac{b}{2a}, -\\frac{D}{4a}\\right)$ for graphical view.",
-            "If $c = 0$, one root is $0$ (and the other is $-\\frac{b}{a}$).",
-            "If product $> 0 \\implies$ same sign, if $< 0 \\implies$ opposite.",
-            "Use the interval form to find the set of $x$ values."
-        ],
-        "jee_focus_points": [
-            "Range of roots (using D).",
-            "Location of roots with respect to origin.",
-            "Use of $\\alpha+\\beta, \\alpha\\beta$ for sign and intervals.",
-            "Vertex form and its significance.",
-            "Application in quadratic inequalities.",
-            "Quick decision using D, b, c."
-        ],
-        "traps_and_pitfalls": [
-            "Forgetting the leading coefficient condition $a \\ne 0$; if $a = 0$, equation reduces to linear!",
-            "Assuming $D > 0$ guarantees positive roots: you MUST check both $-b/a > 0$ and $c/a > 0$.",
-            "Cancelling $(x - k)$ on both sides of an inequality without testing whether $(x - k) > 0$ or $< 0$.",
-            "Overlooking that complex roots occur in conjugate pairs ONLY when all coefficients $a, b, c$ are real."
-        ],
-        "examples": [
-            {
-                "title": "Example 1: Location of Roots with Respect to a Specified Number",
-                "problem": "Find all values of $m$ for which both roots of the equation $x^2 - 2mx + m^2 - 1 = 0$ are greater than $2$.",
-                "approach": "For both roots to be greater than $k = 2$: (1) $D \\ge 0$, (2) $a f(k) > 0$, (3) Vertex $-\\frac{b}{2a} > k$.",
-                "solution": "1. Discriminant: $D = (-2m)^2 - 4(1)(m^2 - 1) = 4m^2 - 4m^2 + 4 = 4 > 0$. Real and distinct roots for all $m \\in \\mathbb{R}$.\\n2. $a f(2) > 0 \\implies 1 \\cdot (2^2 - 2m(2) + m^2 - 1) > 0 \\implies m^2 - 4m + 3 > 0 \\implies (m - 1)(m - 3) > 0 \\implies m \\in (-\\infty, 1) \\cup (3, \\infty)$.\\n3. Vertex position: $-\\frac{b}{2a} = \\frac{2m}{2} = m > 2 \\implies m \\in (2, \\infty)$.\\n4. Intersection of (2) and (3): $(-\\infty, 1) \\cup (3, \\infty) \\cap (2, \\infty) = (3, \\infty)$.\\n   Final answer: $m \\in (3, \\infty)$.",
-                "key_takeaway": "Always verify all 3 mandatory conditions ($D \\ge 0, a f(k) > 0, -b/2a > k$) when bounding both roots."
-            },
-            {
-                "title": "Example 2: Quadratic Inequality & Domain Determination",
-                "problem": "Find the domain of definition of the real function $f(x) = \\sqrt{x^2 - 5x + 6} + \\frac{1}{\\sqrt{4 - x^2}}$.",
-                "approach": "Combine the conditions: (1) Radicand 1 $\\ge 0$: $x^2 - 5x + 6 \\ge 0$, (2) Radicand 2 in denominator $> 0$: $4 - x^2 > 0$.",
-                "solution": "1. Factor first quadratic: $(x - 2)(x - 3) \\ge 0 \\implies x \\in (-\\infty, 2] \\cup [3, \\infty)$.\\n2. Second inequality: $x^2 < 4 \\implies x \\in (-2, 2)$.\\n3. Take intersection: $((-\\infty, 2] \\cup [3, \\infty)) \\cap (-2, 2) = (-2, 2)$.\\n   Domain: $x \\in (-2, 2)$.",
-                "key_takeaway": "Boundary points of inequalities are precisely the roots of the corresponding quadratic equations."
-            }
-        ]
-    },
+    "Quadratic Equations & Expressions": get_quadratic_full_notes(),
 
     # -------------------------------------------------------------
     # CHEMISTRY: Mole Concept & Stoichiometry (NCERT Ch 1)
@@ -2069,6 +1947,397 @@ def synthesize_notebook_notes(chapter_name, subject, class_level, ncert_order, i
         ]
     }
 
+def build_multi_sheets_for_curated(note, chapter_formulas):
+    """
+    Builds a 3-sheet notebook collection for curated chapters that don't already have multi-sheet definitions:
+    Sheet 1: Core Principles, Laws & Classification
+    Sheet 2: Analytical Formulations, Parameter Variations & Governing Curves
+    Sheet 3: Exam Traps, Rapid Tricks & Solved Examples
+    """
+    ch = note.get("chapter", "")
+    sub = note.get("subject", "")
+    cls = note.get("class_level", 11)
+    nref = note.get("ncert_ref", "")
+    imp = note.get("importance", "")
+    
+    # Sheet 1: Core Principles & Classification
+    s1 = {
+        "page_number": 1,
+        "sheet_title": note.get("sheet_title", f"{ch}: Core Principles & Laws"),
+        "chapter": ch,
+        "subject": sub,
+        "class_level": cls,
+        "ncert_ref": nref,
+        "importance": imp,
+        "introduction": note.get("introduction", ""),
+        "classification_heading": note.get("classification_heading", "2. Primary Classification & Regimes"),
+        "classification_cases": note.get("classification_cases", []),
+        "parameter_heading": note.get("parameter_heading", "3. Parameter & Sign Rules"),
+        "parameter_analysis": note.get("parameter_analysis", []),
+        "graphical_view": note.get("graphical_view"),
+        "important_points_heading": "6. Important Principles & Laws",
+        "important_points": note.get("important_points", [])[:4],
+        "quick_tips": note.get("quick_tips", [])[:4],
+        "jee_focus_points": note.get("jee_focus_points", [])[:4],
+        "mnemonic_banner": note.get("mnemonic_banner", ""),
+        "formulas": chapter_formulas[:3] if chapter_formulas else []
+    }
+    
+    # Sheet 2: Analytical Formulations, Parameter Variations & Governing Curves
+    pts2 = note.get("important_points", [])[3:] if len(note.get("important_points", [])) > 3 else note.get("important_points", [])
+    tips2 = note.get("quick_tips", [])[3:] if len(note.get("quick_tips", [])) > 3 else note.get("quick_tips", [])
+    foc2 = note.get("jee_focus_points", [])[3:] if len(note.get("jee_focus_points", [])) > 3 else note.get("jee_focus_points", [])
+    
+    s2 = {
+        "page_number": 2,
+        "sheet_title": f"Analytical Formulations & Governing Curves",
+        "chapter": ch,
+        "subject": sub,
+        "class_level": cls,
+        "ncert_ref": nref,
+        "importance": imp,
+        "introduction": f"Analytical relations in {ch} connect state variables, forces, fields, and equilibrium states through differential and conservation balances. Precision requires setting appropriate boundary limits and verifying sign conventions.",
+        "classification_heading": "2. Mathematical Regimes & Limiting States",
+        "classification_cases": [
+            {
+                "badge": "(i) Low / Near-Zero Regime",
+                "title": "Low / Near-Zero Limit",
+                "condition": "x -> 0 or t -> 0",
+                "description": "Initial state behavior, linearized approximations, and early-time gradients.",
+                "range": "x \\approx 0",
+                "consequence": "Higher-order non-linear terms vanish; leading linear term dominates."
+            },
+            {
+                "badge": "(ii) Intermediate / Steady State",
+                "title": "Intermediate / Dynamic Steady State",
+                "condition": "Dynamic Equilibrium",
+                "description": "Operating regime where rates of accumulation equal rates of dissipation.",
+                "range": "df/dt = 0 \\text{ or } \\Sigma F = 0",
+                "consequence": "System attains stable equilibrium or constant terminal speed / concentration."
+            },
+            {
+                "badge": "(iii) Asymptotic / High Boundary",
+                "title": "Asymptotic / Infinite Limit",
+                "condition": "x -> \\infty or t -> \\infty",
+                "description": "Long-term convergence, saturation limits, and energy conservation extremes.",
+                "range": "x \\to \\infty",
+                "consequence": "Asymptotic upper bounds dictate absolute capacity or threshold behavior."
+            }
+        ],
+        "parameter_heading": "3. Analytical Parameter Dependencies",
+        "parameter_analysis": note.get("parameter_analysis", []),
+        "interval_rules": note.get("interval_rules"),
+        "graphical_view": note.get("graphical_view"),
+        "important_points_heading": "6. Analytical Invariants & Conservation Laws",
+        "important_points": pts2 if pts2 else [
+            f"Always establish inertial or standard reference frames in {ch}.",
+            f"Conserve total energy and relevant invariants across states.",
+            f"Verify boundary continuity across interfaces or state transitions.",
+            f"Check dimensional homogeneity of every derived expression."
+        ],
+        "quick_tips": tips2 if tips2 else [
+            "Use ratio comparison methods to eliminate constants.",
+            "Test symmetry across coordinate axes.",
+            "Verify steady state before integrating differential equations.",
+            "Use logarithmic scales for exponential processes."
+        ],
+        "jee_focus_points": foc2 if foc2 else [
+            "Variable mass / field problems.",
+            "Conservation laws and energy partitioning.",
+            "Time constants and transient response.",
+            "Graphical interpretation of slopes and enclosed areas."
+        ],
+        "mnemonic_banner": "Analyze boundaries... Verify sign conventions and invariant conservation laws!",
+        "formulas": chapter_formulas[3:7] if len(chapter_formulas) > 3 else chapter_formulas
+    }
+    
+    # Sheet 3: Exam Traps, Fast Tricks & Solved Examples
+    s3 = {
+        "page_number": 3,
+        "sheet_title": f"Exam Traps, Fast Tricks & Solved Examples",
+        "chapter": ch,
+        "subject": sub,
+        "class_level": cls,
+        "ncert_ref": nref,
+        "importance": imp,
+        "introduction": f"Exam mastery in {ch} requires spotting hidden traps, avoiding premature numerical approximations, exploiting dimensional checks, and deploying proven shortcut algorithms for JEE Main & Advanced.",
+        "classification_heading": "2. High-Frequency Traps & Boundary Fallacies",
+        "classification_cases": [
+            {
+                "badge": "Trap 1: Leading Boundary",
+                "title": "Reference Frame & Sign Inversion",
+                "condition": "Vector / Direction Mismatch",
+                "description": "Failing to establish a consistent positive coordinate direction before applying formulas.",
+                "range": "Sign Error (+/-)",
+                "consequence": "Leads to negative square roots or incorrect sign in work/potential terms."
+            },
+            {
+                "badge": "Trap 2: Formula Validity Limits",
+                "title": "Applying Special Cases Generally",
+                "condition": "Non-Ideal / Non-Uniform Regimes",
+                "description": "Applying constant-acceleration, ideal gas, or small-angle formulas outside their valid domain.",
+                "range": "Validity Violation",
+                "consequence": "Must revert to fundamental calculus when quantities vary."
+            },
+            {
+                "badge": "Trap 3: Unit & Standard State",
+                "title": "SI Unit & Constant Conversion",
+                "condition": "Inconsistent Units (cm, L, atm, J)",
+                "description": "Mixing bar/atm with SI Joules, or degrees with radians in calculus.",
+                "range": "Scale Error (10^3, 10^5)",
+                "consequence": "Always convert to pure SI (meters, seconds, Pascals, Kelvin, Coulombs, radians) first."
+            }
+        ],
+        "parameter_heading": "3. Rapid Elimination & Shortcut Methods",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Dimensional Analysis Filter",
+                "rules": [
+                    {"cond": "Step 1", "res": "Check dimensions of all 4 options before solving."},
+                    {"cond": "Step 2", "res": "Instantly eliminates options with mismatched dimensions."},
+                    {"cond": "Step 3", "res": "Saves 2-3 minutes per question in JEE Main."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Extreme Limiting Value Test",
+                "rules": [
+                    {"cond": "Limit 1", "res": "Set variable to 0; check if answer matches known static result."},
+                    {"cond": "Limit 2", "res": "Set variable to infinity; check if asymptotic limit matches physical intuition."},
+                    {"cond": "Limit 3", "res": "Set symmetric angles (45 deg or 90 deg) to simplify."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. JEE Advanced Quick Elimination Rules",
+            "cases": [
+                "Dimensional consistency check on all options eliminates wrong choices in seconds.",
+                "Extreme limiting conditions ($x \\to 0, x \\to \\infty$) isolate the only physically consistent formula.",
+                "Check symmetry: if physical setup is symmetric, transverse forces or fields MUST cancel.",
+                "Verify conservation invariants: Total energy, momentum, or charge CANNOT change in closed systems."
+            ],
+            "note": "Double check boundary limits and units before finalizing the response."
+        },
+        "traps_and_pitfalls": note.get("traps_and_pitfalls", [
+            "Neglecting reference frames and vector sign conventions.",
+            "Applying constant formula approximations when variables depend on position or time.",
+            "Mixing non-SI units without standard conversion factors."
+        ]),
+        "examples": note.get("examples", []),
+        "quick_tips": [
+            "Use dimensional verification first.",
+            "Check extreme limits (0 and infinity) to confirm algebraic forms.",
+            "Track vector signs relative to a single chosen origin.",
+            "Look for symmetry to eliminate half the calculation steps."
+        ],
+        "jee_focus_points": [
+            "Multi-concept synthesis problems spanning mechanics/algebra.",
+            "Calculus integration over variable distributions.",
+            "Sign and direction conventions in work and flux.",
+            "Approximation validity criteria."
+        ],
+        "mnemonic_banner": "Units check... Extreme limits check... Symmetry check!",
+        "formulas": chapter_formulas[7:] if len(chapter_formulas) > 7 else chapter_formulas
+    }
+    
+    return [s1, s2, s3]
+
+
+def build_multi_sheets_for_synthesized(synth_note, chapter_name, subject, class_level, ncert_order, importance, topics, chapter_formulas):
+    """
+    Builds a 3-sheet notebook collection for synthesized chapters:
+    Sheet 1: Core Definitions, Principles & Classifications (Topics 0 & 1)
+    Sheet 2: Analytical Formulations, Graphs & Case Studies (Topics 2 & 3)
+    Sheet 3: Exam Traps, Fast Elimination Tricks & Solved Examples (Topics 4+, Pitfalls, Examples)
+    """
+    t0 = topics[0] if topics else chapter_name
+    t1 = topics[1] if len(topics) > 1 else t0
+    t2 = topics[2] if len(topics) > 2 else "Analytical Formulations & Coordinate Dynamics"
+    t3 = topics[3] if len(topics) > 3 else "Boundary Limits & Critical Thresholds"
+    nref = f"Class {class_level}, Chapter {ncert_order}: {chapter_name}"
+    
+    # Sheet 1: Foundational Principles & Classifications
+    s1 = dict(synth_note)
+    s1["page_number"] = 1
+    s1["sheet_title"] = f"{t0}: Core Principles & Classifications"
+    s1["chapter"] = chapter_name
+    s1["subject"] = subject
+    s1["class_level"] = class_level
+    s1["ncert_ref"] = nref
+    s1["importance"] = importance
+    s1["formulas"] = chapter_formulas[:3] if chapter_formulas else []
+    
+    # Sheet 2: Analytical Formulations, Curves & Case Studies
+    s2 = {
+        "page_number": 2,
+        "sheet_title": f"{t1} & Analytical Coordinate Dynamics",
+        "chapter": chapter_name,
+        "subject": subject,
+        "class_level": class_level,
+        "ncert_ref": nref,
+        "importance": importance,
+        "introduction": f"Analytical relations in {t1} and {t2} govern physical and mathematical transformations across varying parameters. Establishing coordinate origins and testing asymptotic bounds ensures rigorous derivations.",
+        "classification_heading": f"2. Operational Boundaries & Regimes in {t1}",
+        "classification_cases": [
+            {
+                "badge": f"(i) Linear / Leading-Order Regime ({t1})",
+                "title": "Linear / Leading-Order Regime",
+                "condition": "Small Perturbation / Dilute Limit",
+                "description": f"First-order behavior where rate equations simplify linearly across {t1}.",
+                "range": "x \\ll 1",
+                "consequence": "Linear superposition and first derivatives govern the response."
+            },
+            {
+                "badge": f"(ii) Steady Dynamic State ({t2})",
+                "title": f"Steady Dynamic State: {t2}",
+                "condition": "Equilibrium & Energy Conservation",
+                "description": "Stable operating regime where driving forces balance dissipative resistance.",
+                "range": "df/dt = 0 \\text{ or } F_{net} = 0",
+                "consequence": "State variables achieve equilibrium values; net rate of accumulation is zero."
+            },
+            {
+                "badge": f"(iii) Critical / Saturation Threshold ({t3})",
+                "title": f"Critical Threshold & Saturation: {t3}",
+                "condition": "Extreme Boundary Condition",
+                "description": "Limit where non-linear feedback or capacity saturation occurs.",
+                "range": "x \\to x_{crit}",
+                "consequence": "Abrupt phase transition, resonance peak, or asymptote reached."
+            }
+        ],
+        "parameter_heading": f"3. Parameter & Coordinate Variations in {t2}",
+        "parameter_analysis": [
+            {
+                "sub_badge": f"(i) Rate of Change & Derivative Tests ({t1})",
+                "rules": [
+                    {"cond": "First Derivative df/dx > 0", "res": "Quantity strictly increasing with parameter."},
+                    {"cond": "First Derivative df/dx = 0", "res": "Stationary critical point / local extremum."},
+                    {"cond": "Second Derivative d²f/dx²", "res": "Concavity and inflection mark stability changes."}
+                ]
+            },
+            {
+                "sub_badge": f"(ii) Parameter Scaling & Ratios ({t2})",
+                "rules": [
+                    {"cond": "Direct Scaling", "res": "Power-law scaling determines curve steepness."},
+                    {"cond": "Inverse Scaling", "res": "Asymptotic hyperbolic decay toward axis."},
+                    {"cond": "Dimensionless Ratios", "res": "Determines regime dominance (e.g. Reynolds / Mach / Q-factor)."}
+                ]
+            }
+        ],
+        "interval_rules": synth_note.get("interval_rules"),
+        "graphical_view": synth_note.get("graphical_view"),
+        "important_points_heading": f"6. Key Analytical Invariants in {chapter_name}",
+        "important_points": [
+            f"Always establish an unambiguous origin and positive coordinate axis for {chapter_name}.",
+            f"Conserve total system invariants (energy, momentum, mass, charge) across all transitions.",
+            f"Boundary values at interfaces must satisfy continuity of state functions.",
+            f"Check dimensional homogeneity of every term before numerical calculation."
+        ],
+        "quick_tips": [
+            f"Use ratio comparisons between two states to eliminate unmeasured constants in {t1}.",
+            f"Exploit geometric or coordinate symmetry to halve integration domains.",
+            f"Confirm whether dynamic equilibrium applies before writing differential balances.",
+            f"Look for logarithmic or exponential asymptotic decays."
+        ],
+        "jee_focus_points": [
+            f"Analytical curve analysis and interpretation of slopes/areas in {t1}.",
+            f"Coupled multi-step transformations in {t2}.",
+            f"Boundary value problems and critical threshold calculations.",
+            f"Non-linear scaling and log-log coordinate plots."
+        ],
+        "mnemonic_banner": "Check boundaries... Confirm sign conventions... Conserve invariants!",
+        "formulas": chapter_formulas[3:7] if len(chapter_formulas) > 3 else chapter_formulas
+    }
+    
+    # Sheet 3: Exam Traps, Rapid Elimination & Solved Numerical Examples
+    s3 = {
+        "page_number": 3,
+        "sheet_title": f"Exam Traps, Rapid Tricks & Solved Examples",
+        "chapter": chapter_name,
+        "subject": subject,
+        "class_level": class_level,
+        "ncert_ref": nref,
+        "importance": importance,
+        "introduction": f"JEE Main and Advanced questions on {chapter_name} frequently test boundary edge cases, reference-frame shifts, and dimensional traps. Deploying elimination algorithms avoids standard pitfalls.",
+        "classification_heading": "2. High-Frequency Traps & Boundary Fallacies",
+        "classification_cases": [
+            {
+                "badge": "Trap 1: Coordinate / Sign Error",
+                "title": "Reference Frame & Vector Signs",
+                "condition": "Direction Mismatch",
+                "description": f"Inverting signs between scalar components and vector directions in {chapter_name}.",
+                "range": "Sign Error (+/-)",
+                "consequence": "Leads to sign reversals in potential, work, or equilibrium equations."
+            },
+            {
+                "badge": "Trap 2: Premature Approximations",
+                "title": "Applying Approximations Out of Domain",
+                "condition": "Validity Boundary Violation",
+                "description": f"Using small-angle or dilute formulas when deviations exceed 5%.",
+                "range": "Approx. Limit",
+                "consequence": "Revert to exact trigonometric or non-linear expressions."
+            },
+            {
+                "badge": "Trap 3: Unit Mixing",
+                "title": "Non-SI Conversion Mistakes",
+                "condition": "Unit Mismatch (cm, L, atm, bar, eV)",
+                "description": "Failing to convert all inputs to fundamental SI base units before computation.",
+                "range": "Scale Error (10^2 - 10^6)",
+                "consequence": "Always convert to meters, seconds, Joules, Kelvins, Coulombs, and radians first."
+            }
+        ],
+        "parameter_heading": "3. Rapid Elimination & Shortcut Methods",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Dimensional Consistency Check",
+                "rules": [
+                    {"cond": "Step 1", "res": "Check dimensions of target variable against options before calculating."},
+                    {"cond": "Step 2", "res": "Eliminate options with incompatible powers of length, time, or mass."},
+                    {"cond": "Step 3", "res": "Often isolates the unique correct answer in under 45 seconds."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Extreme Limiting Value Test",
+                "rules": [
+                    {"cond": "Limit 1", "res": "Evaluate behavior as parameter -> 0; verify against static limit."},
+                    {"cond": "Limit 2", "res": "Evaluate behavior as parameter -> infinity; verify asymptotic consistency."},
+                    {"cond": "Limit 3", "res": "Test symmetric boundary angles (0, 45, 90 deg) to cancel terms."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. JEE Advanced Quick Elimination Rules",
+            "cases": [
+                "Dimensional consistency check on all 4 options eliminates wrong options in seconds.",
+                "Testing extreme limiting conditions ($x \\to 0, x \\to \\infty$) identifies the correct formula shape.",
+                "Symmetry arguments: in symmetric configurations, transverse forces/fields cancel out identically.",
+                "Conservation checks: Total Energy, Momentum, Mass, or Charge CANNOT change in closed systems."
+            ],
+            "note": "Double check boundary limits and standard units before finalizing your response."
+        },
+        "traps_and_pitfalls": synth_note.get("traps_and_pitfalls", [
+            f"Neglecting reference frames and vector sign conventions in {chapter_name}.",
+            f"Applying constant-rate formulas when parameters vary with time or displacement.",
+            f"Mixing non-SI units without converting to base SI units."
+        ]),
+        "examples": synth_note.get("examples", []),
+        "quick_tips": [
+            "Use dimensional verification first to eliminate invalid choices.",
+            "Check extreme limits (0 and infinity) to verify algebraic forms.",
+            "Track vector signs relative to a single fixed origin.",
+            "Look for symmetry to eliminate redundant calculation steps."
+        ],
+        "jee_focus_points": [
+            f"Multi-concept synthesis problems in {chapter_name}.",
+            "Calculus integration across non-uniform distributions.",
+            "Sign conventions and reference frame transformations.",
+            "Approximation validity criteria."
+        ],
+        "mnemonic_banner": "Units check... Extreme limits check... Symmetry check!",
+        "formulas": chapter_formulas[7:] if len(chapter_formulas) > 7 else chapter_formulas
+    }
+    
+    return [s1, s2, s3]
+
+
 def generate_notes_for_chapter(chapter_name):
     """
     Returns handcrafted notes if present (including exact match to user's photo),
@@ -2080,6 +2349,25 @@ def generate_notes_for_chapter(chapter_name):
     if chapter_name in CURATED_NOTES:
         note = dict(CURATED_NOTES[chapter_name])
         note["formulas"] = chapter_formulas
+        
+        # Ensure multi-sheet support
+        if "sheets" in note and len(note["sheets"]) > 0:
+            for s in note["sheets"]:
+                if "formulas" not in s:
+                    s["formulas"] = chapter_formulas
+                if "chapter" not in s:
+                    s["chapter"] = note.get("chapter", chapter_name)
+                if "subject" not in s:
+                    s["subject"] = note.get("subject", "")
+                if "ncert_ref" not in s:
+                    s["ncert_ref"] = note.get("ncert_ref", "")
+                if "importance" not in s:
+                    s["importance"] = note.get("importance", "")
+            note["total_pages"] = len(note["sheets"])
+        else:
+            note["sheets"] = build_multi_sheets_for_curated(note, chapter_formulas)
+            note["total_pages"] = len(note["sheets"])
+
         # Backwards compatibility
         if "important_topics" not in note:
             note["important_topics"] = [
@@ -2124,6 +2412,8 @@ def generate_notes_for_chapter(chapter_name):
     synth_note = synthesize_notebook_notes(chapter_name, subj, cls, order, imp, topics)
     synth_note["formulas"] = chapter_formulas
     synth_note["key_takeaway"] = synth_note.get("mnemonic_banner", "")
+    synth_note["sheets"] = build_multi_sheets_for_synthesized(synth_note, chapter_name, subj, cls, order, imp, topics, chapter_formulas)
+    synth_note["total_pages"] = len(synth_note["sheets"])
 
     synth_note["important_topics"] = [
         {
