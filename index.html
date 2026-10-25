@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEE Prep Tracker & Adaptive Diagnostic Test Engine</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              jee: '#4f46e5',
+              jeeDark: '#3730a3',
+              accent: '#f59e0b',
+              danger: '#ef4444'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- KaTeX for Math & Science Formula Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body);"></script>
+
+  <!-- Chart.js for Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-slate-800/90 backdrop-blur border-b border-slate-700 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="showView('dashboard')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-indigo-500/20 font-black text-xl text-white">
+          JEE
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            JEE Study Tracker <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">Mains & Advanced</span>
+          </h1>
+          <p class="text-xs text-slate-400">Adaptive Diagnostic Testing & Weak-Topic Remedial Engine</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Bar -->
+      <div class="hidden md:flex items-center space-x-6 text-sm">
+        <div class="flex items-center space-x-2 bg-slate-800/60 border border-slate-700 px-3 py-1.5 rounded-lg">
+          <span class="text-slate-400">Tested:</span>
+          <span id="navTestedChapters" class="font-bold text-emerald-400">0/26 Chapters</span>
+        </div>
+        <div class="flex items-center space-x-2 bg-slate-800/60 border border-slate-700 px-3 py-1.5 rounded-lg">
+          <span class="text-slate-400">Weak Topics:</span>
+          <span id="navWeakCount" class="font-bold text-rose-400">0 identified</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-3">
+        <button onclick="openTestModal()" class="flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold text-sm px-4 py-2 rounded-xl shadow-lg shadow-indigo-600/30 transition-all transform active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Take Test</span>
+        </button>
+
+        <button onclick="showView('formulas')" class="flex items-center space-x-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 font-medium text-sm px-3 py-2 rounded-xl transition">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Formulas</span>
+        </button>
+
+        <button onclick="showView('weak-hub')" class="flex items-center space-x-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 font-medium text-sm px-3 py-2 rounded-xl transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <span>Weak Topics</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- VIEW 1: DASHBOARD & CHAPTER TRACKER -->
+    <section id="view-dashboard" class="space-y-6">
+      
+      <!-- First Time Proactive Hero Callout -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900/60 via-slate-800 to-slate-800 border border-indigo-500/30 p-6 md:p-8 shadow-2xl">
+        <div class="relative z-10 max-w-2xl space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span>🚀 JEE 2026 Strategy</span>
+            <span>•</span>
+            <span>Targeted Mastery Engine</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Which chapter's test would you like to take today?
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Select any chapter from Physics, Chemistry, or Mathematics. Our adaptive engine crafts standard JEE Main and Advanced level tests, diagnoses concept gaps, flags weak topics, and builds targeted remedial tests so you never lose marks on repeat concepts!
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="openTestModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 text-sm transition transform active:scale-95 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              <span>Choose Chapter & Prepare Test</span>
+            </button>
+            <button onclick="openTestModal(null, null, 'Basic (Marks)')" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold rounded-xl shadow-lg shadow-emerald-500/20 text-sm transition transform active:scale-95 flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <span>⚡ Practice Basic Questions (Marks)</span>
+            </button>
+            <button onclick="showView('weak-hub')" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-semibold rounded-xl text-sm transition">
+              Review Identified Weak Topics
+            </button>
+          </div>
+        </div>
+        <div class="absolute right-0 bottom-0 top-0 w-1/3 opacity-10 pointer-events-none hidden lg:flex items-center justify-center">
+          <svg class="w-80 h-80 text-indigo-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+      </div>
+
+      <!-- Syllabus Progress Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Physics Card -->
+        <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-5 hover:border-indigo-500/50 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span class="font-bold text-sky-400 uppercase tracking-wider">Physics</span>
+            <span id="phyTestedCount">0/10 tested</span>
+          </div>
+          <div class="text-xl font-bold text-white mb-2" id="phyAccuracy">0% Avg Accuracy</div>
+          <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+            <div id="phyProgressBar" class="bg-sky-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Chemistry Card -->
+        <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-5 hover:border-emerald-500/50 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span class="font-bold text-emerald-400 uppercase tracking-wider">Chemistry</span>
+            <span id="chemTestedCount">0/8 tested</span>
+          </div>
+          <div class="text-xl font-bold text-white mb-2" id="chemAccuracy">0% Avg Accuracy</div>
+          <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+            <div id="chemProgressBar" class="bg-emerald-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Mathematics Card -->
+        <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-5 hover:border-amber-500/50 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span class="font-bold text-amber-400 uppercase tracking-wider">Mathematics</span>
+            <span id="mathTestedCount">0/8 tested</span>
+          </div>
+          <div class="text-xl font-bold text-white mb-2" id="mathAccuracy">0% Avg Accuracy</div>
+          <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+            <div id="mathProgressBar" class="bg-amber-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Tests Given & Weak Ratio -->
+        <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-5 hover:border-rose-500/50 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span class="font-bold text-rose-400 uppercase tracking-wider">Weak Topics</span>
+            <span id="statTestsGiven">0 Tests Taken</span>
+          </div>
+          <div class="text-xl font-bold text-rose-300 mb-2" id="statWeakCount">0 Weak Topics</div>
+          <p class="text-xs text-slate-400">Tracked across all tests for instant targeted drills.</p>
+        </div>
+      </div>
+
+      <!-- Chapters Filter and Search Section -->
+      <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-white">Full JEE Syllabus Chapter Tracker</h3>
+            <p class="text-xs text-slate-400">Track test status, accuracy, and subtopics for each chapter</p>
+          </div>
+
+          <!-- Filters -->
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Subject Filter -->
+            <div class="inline-flex bg-slate-900 p-1 rounded-xl border border-slate-700 text-xs font-semibold">
+              <button onclick="setSubjectFilter('All')" class="filter-subj-btn px-3 py-1.5 rounded-lg transition bg-indigo-600 text-white" data-subj="All">All</button>
+              <button onclick="setSubjectFilter('Physics')" class="filter-subj-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-subj="Physics">Physics</button>
+              <button onclick="setSubjectFilter('Chemistry')" class="filter-subj-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-subj="Chemistry">Chemistry</button>
+              <button onclick="setSubjectFilter('Mathematics')" class="filter-subj-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-subj="Mathematics">Math</button>
+            </div>
+
+            <!-- Class Level Filter -->
+            <div class="inline-flex bg-slate-900 p-1 rounded-xl border border-slate-700 text-xs font-semibold">
+              <button onclick="setClassFilter('All')" class="filter-class-btn px-3 py-1.5 rounded-lg transition bg-emerald-600 text-white" data-class="All">All Classes</button>
+              <button onclick="setClassFilter(11)" class="filter-class-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-class="11">Class 11</button>
+              <button onclick="setClassFilter(12)" class="filter-class-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-class="12">Class 12</button>
+            </div>
+
+            <!-- Status Filter -->
+            <select id="statusFilter" onchange="renderChapters()" class="bg-slate-900 border border-slate-700 text-xs rounded-xl px-3 py-2 text-slate-300 focus:outline-none focus:border-indigo-500">
+              <option value="All">All Statuses</option>
+              <option value="Tested">Tested Only</option>
+              <option value="Untested">Untested Only</option>
+              <option value="Needs Revision">Needs Revision</option>
+              <option value="Proficient">Proficient</option>
+            </select>
+
+            <!-- Search input -->
+            <div class="relative">
+              <input type="text" id="chapterSearch" oninput="renderChapters()" placeholder="Search chapter..." class="bg-slate-900 border border-slate-700 text-xs rounded-xl pl-8 pr-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 w-44">
+              <svg class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter Grid Container -->
+        <div id="chaptersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+          <!-- Dynamically populated chapters -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- VIEW 2: CBT TEST ENVIRONMENT (Computer Based Test) -->
+    <section id="view-cbt" class="hidden space-y-4">
+      <!-- Test Header Bar -->
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="cbtSubjectBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Physics</span>
+            <span id="cbtExamTypeBadge" class="text-xs font-bold px-2 py-0.5 rounded bg-slate-700 text-slate-300">JEE Main</span>
+            <span id="cbtRemedialBadge" class="hidden text-xs font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30">🎯 Remedial Drill</span>
+          </div>
+          <h2 id="cbtChapterTitle" class="text-lg font-extrabold text-white mt-1">Rotational Motion</h2>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <!-- Timer -->
+          <div class="flex items-center gap-2 bg-slate-900 border border-slate-700 px-4 py-2 rounded-xl text-slate-200">
+            <svg class="w-5 h-5 text-amber-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div class="font-mono text-base font-bold" id="cbtTimer">15:00</div>
+          </div>
+
+          <button onclick="confirmSubmitTest()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/20 transition">
+            Submit Test
+          </button>
+        </div>
+      </div>
+
+      <!-- CBT Body: Split View (Left Question Area, Right Palette) -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Question Pane (Cols 1-3) -->
+        <div class="lg:col-span-3 bg-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between min-h-[500px]">
+          <div>
+            <!-- Question Metadata Header -->
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-700/80">
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-bold text-indigo-400 bg-indigo-950/60 border border-indigo-800 px-3 py-1 rounded-lg" id="cbtQuestionNum">Question 1 of 5</span>
+                <span class="text-xs text-slate-400" id="cbtQuestionTopic">Topic: Moment of Inertia</span>
+              </div>
+              <div class="text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 px-2.5 py-1 rounded-lg">
+                Marking: +4, -1
+              </div>
+            </div>
+
+            <!-- Question Text -->
+            <div id="cbtQuestionText" class="text-base sm:text-lg text-slate-100 font-normal leading-relaxed mb-6">
+              <!-- Rendered math question -->
+            </div>
+
+            <!-- Options Container -->
+            <div id="cbtOptionsContainer" class="space-y-3">
+              <!-- Rendered Options -->
+            </div>
+          </div>
+
+          <!-- Bottom Question Action Bar -->
+          <div class="pt-6 mt-6 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <button onclick="markForReview()" class="px-3.5 py-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/30 font-semibold text-xs rounded-xl transition">
+                Mark for Review & Next
+              </button>
+              <button onclick="clearResponse()" class="px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 font-semibold text-xs rounded-xl transition">
+                Clear Response
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="prevQuestion()" id="btnPrevQ" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed text-white font-medium text-xs rounded-xl transition">
+                Previous
+              </button>
+              <button onclick="nextQuestion()" id="btnNextQ" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow transition">
+                Save & Next
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Palette Pane (Col 4) -->
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 space-y-4">
+          <h4 class="text-sm font-bold text-slate-200">Question Palette</h4>
+          
+          <!-- Palette Status Legend -->
+          <div class="grid grid-cols-2 gap-2 text-xs text-slate-400 pb-3 border-b border-slate-700">
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Answered
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Not Answered
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span> Marked
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-slate-600 inline-block"></span> Not Visited
+            </div>
+          </div>
+
+          <!-- Palette Buttons Grid -->
+          <div id="cbtPaletteGrid" class="grid grid-cols-5 gap-2">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Overall Test Quick Info -->
+          <div class="pt-4 border-t border-slate-700 text-xs text-slate-400 space-y-1">
+            <p>Target: <span id="cbtTargetSyllabus" class="text-slate-200 font-semibold">Rotational Motion</span></p>
+            <p>Exam Format: <span class="text-slate-200 font-semibold">Single Correct (+4 / -1)</span></p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 3: TEST RESULTS & WEAK TOPIC DIAGNOSTIC -->
+    <section id="view-result" class="hidden space-y-6">
+      
+      <!-- Top Score Banner -->
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-2">
+              <span>Test Complete</span>
+              <span>•</span>
+              <span id="resExamType">JEE Main</span>
+            </div>
+            <h2 id="resChapterName" class="text-2xl sm:text-3xl font-black text-white">Rotational Motion</h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">Diagnostic Performance & Concept Analysis</p>
+          </div>
+
+          <!-- Score Circle / Badge -->
+          <div class="flex items-center gap-6">
+            <div class="text-right">
+              <div class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Your Score</div>
+              <div class="text-3xl sm:text-4xl font-extrabold text-white" id="resScoreText">16 / 20</div>
+              <div class="text-xs font-semibold text-emerald-400" id="resAccuracyText">Accuracy: 80%</div>
+            </div>
+            <div class="w-20 h-20 rounded-2xl bg-indigo-600/30 border border-indigo-500/50 flex flex-col items-center justify-center p-2 text-center">
+              <span class="text-xs text-indigo-300 font-semibold">Percent</span>
+              <span class="text-xl font-black text-white" id="resPercentScore">80%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Bars -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 mt-6 border-t border-slate-700/80">
+          <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
+            <div class="text-xs text-slate-400">Correct (+4 each)</div>
+            <div class="text-lg font-bold text-emerald-400" id="resCorrectCount">4</div>
+          </div>
+          <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
+            <div class="text-xs text-slate-400">Incorrect (-1 each)</div>
+            <div class="text-lg font-bold text-rose-400" id="resIncorrectCount">1</div>
+          </div>
+          <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
+            <div class="text-xs text-slate-400">Unattempted (0)</div>
+            <div class="text-lg font-bold text-slate-400" id="resUnattemptedCount">0</div>
+          </div>
+          <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
+            <div class="text-xs text-slate-400">Time Taken</div>
+            <div class="text-lg font-bold text-sky-400" id="resTimeTaken">4m 12s</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRITICAL SECTION: WEAK TOPIC BREAKDOWN & ACTIONABLE REMEDY -->
+      <div class="bg-gradient-to-r from-rose-950/40 via-slate-800 to-slate-800 border border-rose-500/40 rounded-2xl p-6 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-white">Weak Topic Diagnostics</h3>
+              <p class="text-xs text-rose-300">Identified sub-topics where concept gaps caused negative marks or low accuracy</p>
+            </div>
+          </div>
+
+          <!-- REMEDIAL ACTION BUTTON: User requested "provide questions accordingly" -->
+          <button id="btnLaunchRemedial" onclick="launchRemedialForCurrentTest()" class="px-5 py-2.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-rose-600/30 transition transform active:scale-95 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Practice Identified Weak Topics Now</span>
+          </button>
+        </div>
+
+        <!-- Weak Topics List -->
+        <div id="resWeakTopicsContainer" class="space-y-2 pt-2">
+          <!-- Dynamically filled with weak topics cards -->
+        </div>
+      </div>
+
+      <!-- Detailed Question-by-Question Solutions -->
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 space-y-4">
+        <h3 class="text-lg font-bold text-white">Question Review & Step-by-Step Solutions</h3>
+        <p class="text-xs text-slate-400">Review answers, JEE shortcuts, formulas, and avoid repeat mistakes.</p>
+
+        <div id="resDetailedQuestionsList" class="space-y-4 pt-2">
+          <!-- Dynamic solutions loaded here -->
+        </div>
+
+        <div class="pt-4 flex justify-end">
+          <button onclick="showView('dashboard')" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl transition">
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- VIEW 4: WEAK TOPICS HUB -->
+    <section id="view-weak-hub" class="hidden space-y-6">
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 mb-2">
+            Targeted Remedial Center
+          </div>
+          <h2 class="text-2xl font-black text-white">All Identified Weak Topics</h2>
+          <p class="text-xs sm:text-sm text-slate-400">Cumulative list of topics across Physics, Chemistry, and Math needing reinforcement</p>
+        </div>
+
+        <button onclick="launchAllWeakRemedial()" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-rose-600/30 transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+          Practice All Weak Topics (Mixed Drill)
+        </button>
+      </div>
+
+      <!-- Weak topics table / cards -->
+      <div id="allWeakTopicsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Populated via JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 5: MASTER FORMULA VAULT -->
+    <section id="view-formulas" class="hidden space-y-6">
+      
+      <!-- Formula Vault Header Banner -->
+      <div class="bg-gradient-to-r from-amber-950/40 via-slate-800 to-slate-800 border border-amber-500/40 rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-2">
+            <span>⚡ Quick Revision Sheet</span>
+            <span>•</span>
+            <span>JEE Mains & Advanced</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-white">JEE Master Formula Vault</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">High-yield equations, boundary conditions, and problem-solving shortcuts across Physics, Chemistry, and Mathematics</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-400">Total Formulas:</span>
+          <span id="formulaVaultCountBadge" class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-xl font-bold text-sm">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Formula Filter & Search Controls -->
+      <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+        
+        <!-- Subject Pills -->
+        <div class="inline-flex bg-slate-900 p-1 rounded-xl border border-slate-700 text-xs font-semibold">
+          <button onclick="setFormulaSubjectFilter('All')" class="formula-subj-btn px-3 py-1.5 rounded-lg transition bg-amber-600 text-white" data-fsubj="All">All</button>
+          <button onclick="setFormulaSubjectFilter('Physics')" class="formula-subj-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-fsubj="Physics">Physics</button>
+          <button onclick="setFormulaSubjectFilter('Chemistry')" class="formula-subj-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-fsubj="Chemistry">Chemistry</button>
+          <button onclick="setFormulaSubjectFilter('Mathematics')" class="formula-subj-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-fsubj="Mathematics">Math</button>
+        </div>
+
+        <!-- Class Filter -->
+        <div class="inline-flex bg-slate-900 p-1 rounded-xl border border-slate-700 text-xs font-semibold">
+          <button onclick="setFormulaClassFilter('All')" class="formula-class-btn px-3 py-1.5 rounded-lg transition bg-emerald-600 text-white" data-fclass="All">All Classes</button>
+          <button onclick="setFormulaClassFilter(11)" class="formula-class-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-fclass="11">Class 11</button>
+          <button onclick="setFormulaClassFilter(12)" class="formula-class-btn px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white" data-fclass="12">Class 12</button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="relative flex-1 min-w-[200px]">
+          <input type="text" id="formulaSearchInput" oninput="renderFormulaVault()" placeholder="Search formulas, concepts, variables..." class="w-full bg-slate-900 border border-slate-700 text-xs rounded-xl pl-8 pr-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
+          <svg class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+
+      </div>
+
+      <!-- Formula Cards Grid -->
+      <div id="formulaVaultGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Dynamically populated via JS -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: START NEW TEST (The proactive initial question: "Which chapter would you like to test?") -->
+  <div id="testModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-5 animate-in fade-in zoom-in duration-200">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-slate-700">
+        <div>
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            Prepare Custom Test
+          </h3>
+          <p class="text-xs text-slate-400">First choose your target chapter and exam parameters</p>
+        </div>
+        <button onclick="closeTestModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <div class="space-y-4">
+        <!-- Subject Selection -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">1. Select Subject & Class</label>
+          <div class="grid grid-cols-3 gap-2 mb-2">
+            <button type="button" onclick="selectModalSubject('Physics')" class="modal-subj-btn py-2 px-3 text-xs font-bold rounded-xl border border-slate-600 bg-slate-700 text-white hover:border-sky-400 transition" data-subj="Physics">Physics</button>
+            <button type="button" onclick="selectModalSubject('Chemistry')" class="modal-subj-btn py-2 px-3 text-xs font-bold rounded-xl border border-slate-600 bg-slate-700 text-white hover:border-emerald-400 transition" data-subj="Chemistry">Chemistry</button>
+            <button type="button" onclick="selectModalSubject('Mathematics')" class="modal-subj-btn py-2 px-3 text-xs font-bold rounded-xl border border-slate-600 bg-slate-700 text-white hover:border-amber-400 transition" data-subj="Mathematics">Mathematics</button>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <button type="button" onclick="selectModalClass('All')" class="modal-class-btn py-1.5 px-2 text-[11px] font-bold rounded-lg border border-emerald-500 bg-emerald-950/60 text-emerald-300 transition" data-class="All">All Classes</button>
+            <button type="button" onclick="selectModalClass(11)" class="modal-class-btn py-1.5 px-2 text-[11px] font-bold rounded-lg border border-slate-700 bg-slate-900 text-slate-400 hover:border-slate-500 transition" data-class="11">Class 11</button>
+            <button type="button" onclick="selectModalClass(12)" class="modal-class-btn py-1.5 px-2 text-[11px] font-bold rounded-lg border border-slate-700 bg-slate-900 text-slate-400 hover:border-slate-500 transition" data-class="12">Class 12</button>
+          </div>
+        </div>
+
+        <!-- Chapter Dropdown -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">2. Which chapter's test do you want to give?</label>
+          <select id="modalChapterSelect" onchange="onModalChapterChange()" class="w-full bg-slate-900 border border-slate-700 text-sm rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-indigo-500">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <!-- Target Exam Level -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">3. Target Exam Difficulty</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <label class="flex items-center gap-2 p-2.5 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer hover:border-emerald-500 transition group">
+              <input type="radio" name="modalExamLevel" value="Basic (Marks)" checked class="text-emerald-500 focus:ring-emerald-500">
+              <div>
+                <div class="text-xs font-bold text-white group-hover:text-emerald-300 flex items-center gap-1">
+                  <span>Basic (Marks)</span>
+                  <span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-1 py-0.5 rounded font-mono">L1</span>
+                </div>
+                <div class="text-[10px] text-slate-400">Direct formula & core concepts from Marks</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer hover:border-indigo-500 transition group">
+              <input type="radio" name="modalExamLevel" value="JEE Main" class="text-indigo-600 focus:ring-indigo-500">
+              <div>
+                <div class="text-xs font-bold text-white group-hover:text-indigo-300 flex items-center gap-1">
+                  <span>JEE Main</span>
+                  <span class="text-[9px] bg-indigo-500/20 text-indigo-400 px-1 py-0.5 rounded font-mono">Standard</span>
+                </div>
+                <div class="text-[10px] text-slate-400">Standard single-correct & formula speed</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer hover:border-violet-500 transition group">
+              <input type="radio" name="modalExamLevel" value="JEE Advanced" class="text-violet-600 focus:ring-violet-500">
+              <div>
+                <div class="text-xs font-bold text-white group-hover:text-violet-300 flex items-center gap-1">
+                  <span>JEE Advanced</span>
+                  <span class="text-[9px] bg-violet-500/20 text-violet-400 px-1 py-0.5 rounded font-mono">Rigor</span>
+                </div>
+                <div class="text-[10px] text-slate-400">Multi-concept & analytical depth</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Questions Count -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">4. Number of Questions</label>
+          <div class="flex items-center gap-3">
+            <label class="flex-1 text-center py-2 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer hover:border-indigo-500">
+              <input type="radio" name="modalCount" value="5" checked class="hidden peer">
+              <span class="text-xs font-bold text-slate-300 peer-checked:text-emerald-400">5 Questions (Quick)</span>
+            </label>
+            <label class="flex-1 text-center py-2 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer hover:border-indigo-500">
+              <input type="radio" name="modalCount" value="10" class="hidden peer">
+              <span class="text-xs font-bold text-slate-300 peer-checked:text-emerald-400">10 Questions</span>
+            </label>
+            <label class="flex-1 text-center py-2 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer hover:border-indigo-500">
+              <input type="radio" name="modalCount" value="15" class="hidden peer">
+              <span class="text-xs font-bold text-slate-300 peer-checked:text-emerald-400">15 Questions</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action -->
+      <div class="pt-2">
+        <button onclick="startTestFromModal()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-emerald-500 hover:from-indigo-500 hover:to-emerald-400 text-white font-extrabold rounded-xl shadow-lg shadow-indigo-600/30 transition text-sm flex items-center justify-center gap-2">
+          <span>🚀 Generate Test & Enter Exam</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: CHAPTER REVISION NOTES & WORKED EXAMPLES (Exact Lined Notebook Theme) -->
+  <div id="notesModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 hidden">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-5xl max-h-[94vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+      
+      <!-- Notes Modal Header Controls -->
+      <div class="p-3 sm:p-4 border-b border-slate-700/80 flex items-center justify-between bg-slate-950 no-print gap-3">
+        <div class="flex items-center gap-2 truncate">
+          <span id="notesSubjectBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">Physics</span>
+          <span id="notesNcertBadge" class="text-xs font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 shrink-0">NCERT Ch 5</span>
+          <span id="notesImportanceBadge" class="hidden sm:inline-block text-xs font-semibold text-amber-400 bg-amber-950/40 border border-amber-800/60 px-2 py-0.5 rounded shrink-0">High Yield</span>
+          <h3 id="notesChapterTitle" class="text-sm sm:text-base font-bold text-white truncate">
+            Chapter Short Notes & Formula Sheet
+          </h3>
+        </div>
+
+        <!-- Controls: Search, Theme Toggle, Copy, Print -->
+        <div class="flex items-center gap-2 shrink-0">
+          <div class="relative hidden sm:block">
+            <input type="text" id="notesSearchInput" oninput="filterNotesContent(this.value)" placeholder="🔍 Search concepts..." class="bg-slate-900 border border-slate-700 text-xs px-2.5 py-1.5 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 w-36 sm:w-44"/>
+          </div>
+
+          <div class="inline-flex bg-slate-900 border border-slate-700 rounded-xl p-0.5 text-xs font-semibold">
+            <button id="btnThemeNotebook" onclick="setNotesTheme('notebook')" class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold transition flex items-center gap-1">
+              <span>📒 Notebook</span>
+            </button>
+            <button id="btnThemeDark" onclick="setNotesTheme('dark')" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1">
+              <span>🌙 Dark</span>
+            </button>
+          </div>
+
+          <button onclick="copyNotesMarkdown()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-1" title="Copy Notes as Markdown">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <span class="hidden md:inline">Copy MD</span>
+          </button>
+
+          <button onclick="window.print()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-1" title="Print Revision Sheet">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span class="hidden sm:inline">Print</span>
+          </button>
+
+          <button onclick="closeNotesModal()" class="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Notes Modal Scrollable Body (Lined Notebook Sheet Theme) -->
+      <div id="notesModalBody" class="p-4 sm:p-6 overflow-y-auto flex-1 theme-notebook transition-colors duration-200">
+        
+        <!-- Notebook Sheet Container (Filled dynamically by renderNotebookNotes) -->
+        <div id="notesNotebookSheet" class="space-y-6 max-w-4xl mx-auto">
+          <!-- Dynamically populated with exact 9-section theme matching user's photo -->
+        </div>
+
+      </div>
+
+      <!-- Notes Modal Footer -->
+      <div class="p-3.5 border-t border-slate-700/80 bg-slate-950 flex flex-wrap items-center justify-between gap-3 no-print">
+        <button onclick="closeNotesModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700 transition">
+          Close Notes
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="btnNotesTakeBasicTest" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center gap-1.5">
+            <span>⚡ Basic Drill (Marks)</span>
+          </button>
+          <button id="btnNotesTakeTest" class="px-5 py-2 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+            <span>🚀 Take Test (Standard)</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-4 text-center text-xs text-slate-500 mt-auto">
+    JEE Study Tracker & Diagnostic Engine • Built for rigorous JEE Mains & Advanced Preparation
+  </footer>
+
+  <!-- Data Bundle for Serverless / GitHub Pages deployment -->
+  <script src="static/js/jee_static_data.js"></script>
+  <!-- App Script -->
+  <script src="static/js/app.js"></script>
+</body>
+</html>
+
