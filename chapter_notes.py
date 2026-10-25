@@ -1949,25 +1949,31 @@ def synthesize_notebook_notes(chapter_name, subject, class_level, ncert_order, i
 
 def build_multi_sheets_for_curated(note, chapter_formulas):
     """
-    Builds a 3-sheet notebook collection for curated chapters that don't already have multi-sheet definitions:
-    Sheet 1: Core Principles, Laws & Classification
-    Sheet 2: Analytical Formulations, Parameter Variations & Governing Curves
-    Sheet 3: Exam Traps, Rapid Tricks & Solved Examples
+    Builds an 8-sheet comprehensive notebook booklet for curated chapters:
+    Sheet 1: Core Definitions, Foundational Principles & NCERT Scope
+    Sheet 2: Governing Mathematical Relations & Primary Balances
+    Sheet 3: Analytical Formulations, Graphs & Characteristic Coordinate Curves
+    Sheet 4: Parameter Variations, Extreme Limits & Boundary Edge Cases
+    Sheet 5: Advanced Subtopics & Specialized JEE Advanced Transformations
+    Sheet 6: Cross-Chapter Synthesis & Multi-Concept Coupling
+    Sheet 7: High-Frequency Exam Traps, Calculation Fallacies & Boundary Pitfalls
+    Sheet 8: Speed Mastery, Option Elimination & Solved Illustrative JEE Examples
     """
     ch = note.get("chapter", "")
     sub = note.get("subject", "")
     cls = note.get("class_level", 11)
     nref = note.get("ncert_ref", "")
     imp = note.get("importance", "")
+    base_nref = nref.split("•")[0].strip() if "•" in nref else nref
     
-    # Sheet 1: Core Principles & Classification
+    # Sheet 1: Core Definitions & Primary Classification
     s1 = {
         "page_number": 1,
         "sheet_title": note.get("sheet_title", f"{ch}: Core Principles & Laws"),
         "chapter": ch,
         "subject": sub,
         "class_level": cls,
-        "ncert_ref": nref,
+        "ncert_ref": f"{base_nref} • Sheet 1 of 8",
         "importance": imp,
         "introduction": note.get("introduction", ""),
         "classification_heading": note.get("classification_heading", "2. Primary Classification & Regimes"),
@@ -1980,87 +1986,423 @@ def build_multi_sheets_for_curated(note, chapter_formulas):
         "quick_tips": note.get("quick_tips", [])[:4],
         "jee_focus_points": note.get("jee_focus_points", [])[:4],
         "mnemonic_banner": note.get("mnemonic_banner", ""),
-        "formulas": chapter_formulas[:3] if chapter_formulas else []
+        "formulas": chapter_formulas[:2] if chapter_formulas else []
     }
-    
-    # Sheet 2: Analytical Formulations, Parameter Variations & Governing Curves
-    pts2 = note.get("important_points", [])[3:] if len(note.get("important_points", [])) > 3 else note.get("important_points", [])
-    tips2 = note.get("quick_tips", [])[3:] if len(note.get("quick_tips", [])) > 3 else note.get("quick_tips", [])
-    foc2 = note.get("jee_focus_points", [])[3:] if len(note.get("jee_focus_points", [])) > 3 else note.get("jee_focus_points", [])
-    
+
+    # Sheet 2: Governing Mathematical Relations & Primary Balances
     s2 = {
         "page_number": 2,
-        "sheet_title": f"Analytical Formulations & Governing Curves",
+        "sheet_title": f"Governing Relations & Primary Equilibrium Balances",
         "chapter": ch,
         "subject": sub,
         "class_level": cls,
-        "ncert_ref": nref,
+        "ncert_ref": f"{base_nref} • Sheet 2 of 8",
         "importance": imp,
-        "introduction": f"Analytical relations in {ch} connect state variables, forces, fields, and equilibrium states through differential and conservation balances. Precision requires setting appropriate boundary limits and verifying sign conventions.",
+        "introduction": f"Governing balance equations in {ch} connect state coordinates, rates of change, and field flux. Rigorous analysis requires establishing consistent sign conventions and tracking energy conservation.",
+        "classification_heading": "2. Primary Balance Forms & Representations",
+        "classification_cases": [
+            {
+                "badge": "(i) Differential Rate & Gradient Balance",
+                "title": "Instantaneous Gradient Form",
+                "condition": "dt -> 0 or dx -> 0",
+                "description": f"Local gradients governing rate of transport, acceleration, or reaction in {ch}.",
+                "range": "df/dt \\text{ or } \\nabla \\cdot \\vec{J}",
+                "consequence": "Yields exact local equations of motion or kinetic rate expressions."
+            },
+            {
+                "badge": "(ii) Macroscopic Integral Balance",
+                "title": "Finite Path & Enclosed Volume Accumulation",
+                "condition": "Boundary Path Integration",
+                "description": f"Integration over physical paths or cycles yielding total work, flux, or enthalpy in {ch}.",
+                "range": "\\int_{1}^{2} f(x) dx \\text{ or } \\oint \\vec{F} \\cdot d\\vec{r}",
+                "consequence": "Quantifies net state changes independent of intermediate reversible paths."
+            },
+            {
+                "badge": "(iii) Invariant Conservation Formulation",
+                "title": "Conservation Laws & Constants of Motion",
+                "condition": "Isolated / Closed System",
+                "description": f"Quantities that remain strictly constant throughout transitions in {ch}.",
+                "range": "\\Sigma E = \\text{const}, \\quad \\Sigma p = \\text{const}",
+                "consequence": "Permits instant calculation of final states without integrating internal forces."
+            }
+        ],
+        "parameter_heading": "3. Direction & Vector Sign Conventions",
+        "parameter_analysis": note.get("parameter_analysis", []),
+        "graphical_view": note.get("graphical_view"),
+        "important_points_heading": "6. Analytical Invariants & Conservation Laws",
+        "important_points": note.get("important_points", [])[3:7] if len(note.get("important_points", [])) > 3 else note.get("important_points", []),
+        "quick_tips": note.get("quick_tips", [])[3:7] if len(note.get("quick_tips", [])) > 3 else note.get("quick_tips", []),
+        "jee_focus_points": note.get("jee_focus_points", [])[3:7] if len(note.get("jee_focus_points", [])) > 3 else note.get("jee_focus_points", []),
+        "mnemonic_banner": "Fix origin... Project vectors... Conserve invariant energy!",
+        "formulas": chapter_formulas[2:4] if len(chapter_formulas) > 2 else []
+    }
+
+    # Sheet 3: Analytical Formulations, Graphs & Characteristic Coordinate Curves
+    s3 = {
+        "page_number": 3,
+        "sheet_title": f"Coordinate Dynamics & Characteristic Curves",
+        "chapter": ch,
+        "subject": sub,
+        "class_level": cls,
+        "ncert_ref": f"{base_nref} • Sheet 3 of 8",
+        "importance": imp,
+        "introduction": f"Characteristic curves in {ch} illustrate system response, potential wells, and thermodynamic trajectories. The slope represents intensive local rates, while the enclosed area represents accumulated energy or flux.",
         "classification_heading": "2. Mathematical Regimes & Limiting States",
         "classification_cases": [
             {
-                "badge": "(i) Low / Near-Zero Regime",
-                "title": "Low / Near-Zero Limit",
-                "condition": "x -> 0 or t -> 0",
-                "description": "Initial state behavior, linearized approximations, and early-time gradients.",
+                "badge": "(i) Low / Leading-Order Regime",
+                "title": "Linearized Small Perturbation",
+                "condition": "x << 1 or t -> 0",
+                "description": "Initial state behavior where rate equations simplify linearly.",
                 "range": "x \\approx 0",
                 "consequence": "Higher-order non-linear terms vanish; leading linear term dominates."
             },
             {
-                "badge": "(ii) Intermediate / Steady State",
-                "title": "Intermediate / Dynamic Steady State",
-                "condition": "Dynamic Equilibrium",
-                "description": "Operating regime where rates of accumulation equal rates of dissipation.",
+                "badge": "(ii) Steady Dynamic State",
+                "title": "Dynamic Equilibrium",
+                "condition": "Steady State (Rate of Inflow = Rate of Outflow)",
+                "description": "Operating regime where driving forces balance dissipative resistance.",
                 "range": "df/dt = 0 \\text{ or } \\Sigma F = 0",
-                "consequence": "System attains stable equilibrium or constant terminal speed / concentration."
+                "consequence": "State variables achieve constant equilibrium values."
             },
             {
-                "badge": "(iii) Asymptotic / High Boundary",
-                "title": "Asymptotic / Infinite Limit",
+                "badge": "(iii) Asymptotic / Saturation Limit",
+                "title": "Infinite / Far-Field Boundary",
                 "condition": "x -> \\infty or t -> \\infty",
-                "description": "Long-term convergence, saturation limits, and energy conservation extremes.",
+                "description": "Long-term convergence, saturation limits, or point-source behavior.",
                 "range": "x \\to \\infty",
-                "consequence": "Asymptotic upper bounds dictate absolute capacity or threshold behavior."
+                "consequence": "Asymptotic bounds dictate terminal velocity, maximum concentration, or capacity."
             }
         ],
-        "parameter_heading": "3. Analytical Parameter Dependencies",
-        "parameter_analysis": note.get("parameter_analysis", []),
+        "parameter_heading": "3. Slope & Area Physical Interpretations",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Slope / Tangent Meaning",
+                "rules": [
+                    {"cond": "Slope of Curve", "res": "Represents instantaneous rate of change or intensive property."},
+                    {"cond": "Zero Slope Point", "res": "Marks maximum, minimum, or equilibrium state."},
+                    {"cond": "Concavity Sign", "res": "Positive curvature = stable well; negative curvature = unstable hill."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Enclosed Area Meaning",
+                "rules": [
+                    {"cond": "Area Under Curve", "res": "Accumulated physical work, impulse, or charge: $\\Delta F = \\int y dx$."},
+                    {"cond": "Clockwise Loop", "res": "Positive net work done by the system."},
+                    {"cond": "Counter-clockwise Loop", "res": "Net work absorbed / negative work."}
+                ]
+            }
+        ],
         "interval_rules": note.get("interval_rules"),
         "graphical_view": note.get("graphical_view"),
-        "important_points_heading": "6. Analytical Invariants & Conservation Laws",
-        "important_points": pts2 if pts2 else [
-            f"Always establish inertial or standard reference frames in {ch}.",
-            f"Conserve total energy and relevant invariants across states.",
-            f"Verify boundary continuity across interfaces or state transitions.",
-            f"Check dimensional homogeneity of every derived expression."
+        "special_cases": {
+            "title": "4. Coordinate Intercepts & Boundary Asymptotes",
+            "cases": [
+                "x-Intercept ($y = 0$): Physical zeros, ground states, or equilibrium contact points.",
+                "y-Intercept ($x = 0$): Initial state conditions at $t = 0$.",
+                "Horizontal Asymptote: Terminal state limit as time or coordinate approaches infinity.",
+                "Vertical Asymptote: Resonance peak or barrier breakdown point."
+            ],
+            "note": "Verify whether asymptotic values are approachable or represent strict mathematical bounds."
+        },
+        "important_points_heading": "6. Coordinate Invariants & Symmetry Rules",
+        "important_points": [
+            "Always check the physical dimensions of (y-axis × x-axis) to verify what the graph's area represents.",
+            "Tangent slope at any point equals the first derivative of the governing relation.",
+            "Curvature of potential energy curve dictates oscillation frequency: $\\omega = \\sqrt{U''/m}$.",
+            "Symmetric curves reflect identical forward and backward transition dynamics."
         ],
-        "quick_tips": tips2 if tips2 else [
-            "Use ratio comparison methods to eliminate constants.",
-            "Test symmetry across coordinate axes.",
-            "Verify steady state before integrating differential equations.",
-            "Use logarithmic scales for exponential processes."
+        "quick_tips": [
+            "✓ Area of cycle = net work: Clockwise > 0, Counter-clockwise < 0.",
+            "✓ Check units of slope and area before computing numbers.",
+            "✓ Identify inflection points where second derivative vanishes.",
+            "✓ Exponential decays drop to 37% at one time constant $t = \\tau$."
         ],
-        "jee_focus_points": foc2 if foc2 else [
-            "Variable mass / field problems.",
-            "Conservation laws and energy partitioning.",
-            "Time constants and transient response.",
-            "Graphical interpretation of slopes and enclosed areas."
+        "jee_focus_points": [
+            "Slope and area calculation from experimental/theoretical plots.",
+            "Potential energy curves and stability classification.",
+            "Thermodynamic or electromagnetic cyclic efficiency.",
+            "Asymptotic convergence and stability."
         ],
-        "mnemonic_banner": "Analyze boundaries... Verify sign conventions and invariant conservation laws!",
-        "formulas": chapter_formulas[3:7] if len(chapter_formulas) > 3 else chapter_formulas
+        "mnemonic_banner": "Slope gives the rate... Area gives the accumulation!",
+        "formulas": chapter_formulas[4:6] if len(chapter_formulas) > 4 else []
     }
-    
-    # Sheet 3: Exam Traps, Fast Tricks & Solved Examples
-    s3 = {
-        "page_number": 3,
-        "sheet_title": f"Exam Traps, Fast Tricks & Solved Examples",
+
+    # Sheet 4: Parameter Variations, Extreme Limits & Boundary Edge Cases
+    s4 = {
+        "page_number": 4,
+        "sheet_title": f"Parameter Variations & Asymptotic Limits",
         "chapter": ch,
         "subject": sub,
         "class_level": cls,
-        "ncert_ref": nref,
+        "ncert_ref": f"{base_nref} • Sheet 4 of 8",
         "importance": imp,
-        "introduction": f"Exam mastery in {ch} requires spotting hidden traps, avoiding premature numerical approximations, exploiting dimensional checks, and deploying proven shortcut algorithms for JEE Main & Advanced.",
+        "introduction": f"Examining behavior under extreme parameter values ($x \\to 0, x \\to \\infty, t \\to 0, t \\to \\infty$) is a powerful analytical verification technique in {ch}. Valid formulas must reduce to known canonical results at edge boundaries.",
+        "classification_heading": "2. Extreme Asymptotic Regimes",
+        "classification_cases": [
+            {
+                "badge": "(i) Zero / Small Boundary Limit",
+                "title": "First-Order Perturbation Limit",
+                "condition": "x << 1 or t -> 0",
+                "description": "Initial transient behavior and dilute/small-angle linearizations.",
+                "range": "x \\approx 0",
+                "consequence": "Linear terms dominate; quadratic and higher powers vanish."
+            },
+            {
+                "badge": "(ii) Crossover Characteristic Scale",
+                "title": "Intermediate Transition",
+                "condition": "x ~ x_characteristic",
+                "description": "Scale where competing mechanisms balance equally.",
+                "range": "x \\approx x_0",
+                "consequence": "Maximum rate of transition or resonance inflection occurs."
+            },
+            {
+                "badge": "(iii) Infinite / Far-Field Boundary",
+                "title": "Asymptotic Saturation Limit",
+                "condition": "x >> 1 or t -> inf",
+                "description": "Long-term steady state or point-source far-field approximations.",
+                "range": "x \\to \\infty",
+                "consequence": "Asymptotic power-law decay or constant saturation bound reached."
+            }
+        ],
+        "parameter_heading": "3. Boundary Verification Protocols",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Initial Transient vs Final Steady State",
+                "rules": [
+                    {"cond": "At t = 0", "res": "Inertia prevents instant velocity jumps; uncharged components act as short/open circuits."},
+                    {"cond": "At t -> inf", "res": "Rates of accumulation vanish; system reaches constant terminal values."},
+                    {"cond": "At Extreme Coordinates", "res": "Fields from localized sources reduce to inverse-square point charges."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Boundary Continuity Requirements",
+                "rules": [
+                    {"cond": "Potential / Displacement", "res": "Must be continuous across interfaces (no infinite tears or jumps)."},
+                    {"cond": "Normal / Tangential Flux", "res": "Follows boundary conditions dictated by Gauss's or Ampere's laws."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. Rapid Boundary Verification Box",
+            "cases": [
+                "Test $x = 0$: Does the formula match the known static or initial state?",
+                "Test $x \\to \\infty$: Does the formula approach zero or the correct saturation ceiling?",
+                "Test Symmetric Cases: Do equal masses or symmetric angles yield intuitive symmetric results?",
+                "Test $T \\to 0$ K: Do thermal fluctuations freeze out appropriately?"
+            ],
+            "note": "Any derived formula that fails at a known boundary limit is definitively incorrect."
+        },
+        "important_points_heading": "6. Limiting Theorems & Boundary Rules",
+        "important_points": [
+            "All physical equations must maintain dimensional homogeneity across all limits.",
+            "Energy is strictly conserved across transient transitions into steady states.",
+            "Discontinuities in derivatives mark concentrated surface forces or localized charges.",
+            "Perturbation expansions must smoothly connect back to the unperturbed baseline."
+        ],
+        "quick_tips": [
+            "✓ Test zero and infinity limits on all multiple-choice options.",
+            "✓ Bypasses complex derivations in under 45 seconds.",
+            "✓ Verify symmetric configurations ($m_1=m_2$, $\\theta=45^\\circ$) for rapid checks.",
+            "✓ For exponential decay, remaining amount is $1/e \\approx 37\\%$ at $t = \\tau$."
+        ],
+        "jee_focus_points": [
+            "Transient to steady-state transitions.",
+            "Small-parameter expansions and validity limits.",
+            "Far-field approximations.",
+            "Terminal state calculations."
+        ],
+        "mnemonic_banner": "Test zero... Test infinity... Verify the asymptotic decay!",
+        "formulas": chapter_formulas[6:8] if len(chapter_formulas) > 6 else []
+    }
+
+    # Sheet 5: Advanced Subtopics & Specialized JEE Advanced Transformations
+    s5 = {
+        "page_number": 5,
+        "sheet_title": f"Specialized JEE Advanced Transformations",
+        "chapter": ch,
+        "subject": sub,
+        "class_level": cls,
+        "ncert_ref": f"{base_nref} • Sheet 5 of 8",
+        "importance": imp,
+        "introduction": f"JEE Advanced problems in {ch} test non-standard geometries, non-inertial reference frames, variable distributions, and tensor/vector products. Mastering canonical problem templates ensures rapid setup and solution.",
+        "classification_heading": "2. Specialized Problem Archetypes",
+        "classification_cases": [
+            {
+                "badge": "(i) Non-Inertial / Accelerated Frames",
+                "title": "Pseudo-Force & Effective Potential",
+                "condition": "Reference Frame Accelerates (a_frame != 0)",
+                "description": "Transforming into an accelerated frame requires introducing pseudo-forces $\\vec{F}_p = -m\\vec{a}_{frame}$.",
+                "range": "\\vec{g}_{eff} = \\vec{g} - \\vec{a}_{frame}",
+                "consequence": "Converts accelerated multi-body systems into standard static equilibrium."
+            },
+            {
+                "badge": "(ii) Continuous Variable Distribution",
+                "title": "Calculus Element Integration",
+                "condition": "Non-Uniform Density / Field",
+                "description": "Slice continuous body into differential elements ($dm = \\lambda dx, dq = \\sigma dA$) and integrate.",
+                "range": "F = \\int dF, \\quad U = \\int dU",
+                "consequence": "Must express element coordinates in terms of a single integration variable before solving."
+            },
+            {
+                "badge": "(iii) Coupled Multi-Degree of Freedom States",
+                "title": "Coupled Oscillations & Normal Modes",
+                "condition": "Interacting Dual Components",
+                "description": "Systems where motion of body A exerts reactive force on body B (e.g. dual spring-mass, coupled pendulums).",
+                "range": "\\omega_1, \\omega_2 \\text{ (Normal Frequencies)}",
+                "consequence": "Use center-of-mass coordinates or relative coordinates to decouple equations of motion."
+            }
+        ],
+        "parameter_heading": "3. Advanced Symmetry & Superposition Techniques",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Cavity & Negative Superposition",
+                "rules": [
+                    {"cond": "Step 1", "res": "Consider full complete body without cavity (mass $M_0$, charge $Q_0$)."},
+                    {"cond": "Step 2", "res": "Fill the cavity with fictitious negative mass ($-m_c$) or negative charge ($-q_c$)."},
+                    {"cond": "Step 3", "res": "Superimpose fields: $\\vec{E}_{net} = \\vec{E}_{solid} + \\vec{E}_{negative\\_cavity}$."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Center of Mass / Reduced Mass System",
+                "rules": [
+                    {"cond": "Two-Body System", "res": "Replace two interacting bodies with single reduced mass $\\mu = \\frac{m_1 m_2}{m_1 + m_2}$."},
+                    {"cond": "Internal Energy", "res": "$K_{total} = \\frac{1}{2}(m_1+m_2)v_{cm}^2 + \\frac{1}{2}\\mu v_{rel}^2$."},
+                    {"cond": "Zero Net External Force", "res": "Center of mass moves with constant velocity; internal collisions conserve momentum."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. JEE Advanced Master Formulas & Templates",
+            "cases": [
+                "Reduced Mass: $\\mu = \\frac{m_1 m_2}{m_1 + m_2}$ converts two-body planetary/spring orbits into one-body problem.",
+                "Cavity Theorem: Field inside a spherical cavity in a uniformly charged sphere is UNIFORM: $\\vec{E} = \\frac{\\rho}{3\\epsilon_0}\\vec{d}$.",
+                "Perpendicular Axes: $I_z = I_x + I_y$ applies STRICTLY to planar 2D laminas in the xy-plane.",
+                "Variable Mass Rocket: $m \\frac{dv}{dt} = F_{ext} + v_{rel} \\frac{dm}{dt}$ accounts for mass ejection flux."
+            ],
+            "note": "Never apply 2D planar theorems to 3D solid structures!"
+        },
+        "important_points_heading": "6. Advanced Invariants & Normal Modes",
+        "important_points": [
+            "Pseudo-force line of action passes through the center of mass of the observed body.",
+            "Cavity problems are solved by addition of a complete solid and a negative cavity.",
+            "In reduced mass systems, relative acceleration is $a_{rel} = F_{int}/\\mu$.",
+            "Angular momentum is conserved about any point where net external torque vanishes."
+        ],
+        "quick_tips": [
+            "✓ Use reduced mass $\\mu = m_1 m_2 / (m_1 + m_2)$ for two-block spring systems.",
+            "✓ Inside uniformly charged sphere cavity, field is constant $\\vec{E} = \\rho \\vec{d} / (3\\epsilon_0)$.",
+            "✓ In accelerated elevators, replace $g$ with $g_{eff} = g \\pm a$.",
+            "✓ Choose torque axis passing through unknown normal forces to eliminate them."
+        ],
+        "jee_focus_points": [
+            "Cavity problems in gravitation, electrostatics, and rotational inertia.",
+            "Reduced mass formulation in spring-block oscillations and planetary orbits.",
+            "Non-inertial pseudo forces and effective gravity.",
+            "Variable mass rocket and rope falling problems."
+        ],
+        "mnemonic_banner": "Cavity = Complete + Negative... Two bodies = Reduced mass!",
+        "formulas": chapter_formulas[8:10] if len(chapter_formulas) > 8 else []
+    }
+
+    # Sheet 6: Cross-Chapter Synthesis & Multi-Concept Coupling
+    s6 = {
+        "page_number": 6,
+        "sheet_title": f"Cross-Chapter Synthesis & Hybrid Problem Templates",
+        "chapter": ch,
+        "subject": sub,
+        "class_level": cls,
+        "ncert_ref": f"{base_nref} • Sheet 6 of 8",
+        "importance": imp,
+        "introduction": f"Over 65% of JEE Advanced questions combine {ch} with adjacent domains (e.g. Mechanics + Calculus, Thermodynamics + Kinetics, Electrostatics + SHM). Recognizing standard cross-chapter coupling archetypes is essential for top rankers.",
+        "classification_heading": "2. Primary Multi-Concept Coupling Archetypes",
+        "classification_cases": [
+            {
+                "badge": "(i) Field Theory + Simple Harmonic Motion",
+                "title": "Equilibrium Displacement & Small SHM",
+                "condition": "Small Perturbation around Stable Equilibrium",
+                "description": "A particle in electric, gravitational, or fluid field is displaced slightly by $x$.",
+                "range": "F_{restoring} = -kx \\implies \\omega = \\sqrt{k/m}",
+                "consequence": "Expand potential $U(x)$ around minimum: $k_{eff} = \\left.\\frac{d^2 U}{dx^2}\\right|_{x_0}$ yields time period $T = 2\\pi\\sqrt{m/k_{eff}}$."
+            },
+            {
+                "badge": "(ii) Conservation Laws + Calculus Integration",
+                "title": "Continuously Varying Parameters",
+                "condition": "Non-Uniform Spatial or Time Variation",
+                "description": "Forces, heat capacities, or resistance varying with coordinates ($F(x), C_p(T), R(t)$).",
+                "range": "W = \\int F(x) dx, \\quad \\Delta H = \\int C_p dT",
+                "consequence": "Must set up differential element and integrate between initial and final state boundaries."
+            },
+            {
+                "badge": "(iii) Energy Partitioning + Geometry / Constraints",
+                "title": "Geometric Constraints & Energy Allocation",
+                "condition": "Rigid Invariant Constraints",
+                "description": "String constraints, inclined wedge surfaces, or lens focal intersections bounding degrees of freedom.",
+                "range": "\\Sigma \\vec{T} \\cdot \\vec{v} = 0, \\quad v_x = v_y \\cot \\theta",
+                "consequence": "Geometric constraint equations reduce the number of independent variables before applying energy balances."
+            }
+        ],
+        "parameter_heading": "3. Multi-Concept Problem Decomposition Protocol",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Three-Phase Problem Decomposition",
+                "rules": [
+                    {"cond": "Phase 1: Geometry / Kinematics", "res": "Establish coordinate axes and geometric constraint relations between bodies."},
+                    {"cond": "Phase 2: Dynamics / Conservation", "res": "Write balance equations: $\\Sigma F = ma$, energy conservation, momentum conservation."},
+                    {"cond": "Phase 3: Calculus / Differential Setup", "res": "If variables vary, formulate differential relations and integrate."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Inter-Domain Bridging Variables",
+                "rules": [
+                    {"cond": "Coupling Variable", "res": "Identify the shared physical bridge (e.g. Velocity $v$, Charge $q$, Temperature $T$, Normal force $N$)."},
+                    {"cond": "Elimination Order", "res": "Eliminate auxiliary internal reaction forces first; solve for target observable directly."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. High-Frequency Cross-Chapter Bridging Formulas",
+            "cases": [
+                "Small Oscillations from Potential: $T = 2\\pi \\sqrt{\\frac{m}{U''(x_0)}}$ where $U'(x_0) = 0$ and $U''(x_0) > 0$.",
+                "Work-Energy Theorem: $W_{conservative} + W_{non-conservative} + W_{pseudo} = \\Delta K$.",
+                "Thermodynamics in Mechanics: Work done by gas on piston $W = \\int P dV$ accelerates piston mass: $W - \\text{losses} = \\frac{1}{2}M v^2$.",
+                "Electromagnetic Induction in Mechanics: Induced current produces Lorentz braking force $F = B I L = \\frac{B^2 L^2 v}{R}$, yielding terminal velocity."
+            ],
+            "note": "Cross-chapter problems always require combining equations from two different chapters to solve for the common bridge!"
+        },
+        "important_points_heading": "6. Synthesis Invariants & Inter-Domain Rules",
+        "important_points": [
+            "Total mechanical energy is conserved only when non-conservative work $W_{nc} = 0$.",
+            "Stable equilibrium occurs at potential minimum ($dU/dx = 0, d^2U/dx^2 > 0$); oscillation frequency is $\\sqrt{U''/m}$.",
+            "String and wedge constraint: Total virtual work by tension on rigid connected strings is zero: $\\Sigma \\vec{T} \\cdot \\vec{a} = 0$.",
+            "Magnetic braking forces are velocity-dependent; acceleration decreases exponentially toward terminal state."
+        ],
+        "quick_tips": [
+            "✓ To find SHM time period from potential $U(x)$, compute second derivative $k = d^2U/dx^2$ at minimum.",
+            "✓ Virtual work shortcut: $\\Sigma T \\cdot v = 0$ finds relation between accelerations instantly.",
+            "✓ Identify the bridging variable linking both sub-systems.",
+            "✓ Check if angular momentum is conserved about the point of collision."
+        ],
+        "jee_focus_points": [
+            "Potential energy curves and small oscillation time period.",
+            "Induced EMF in moving conducting rods with friction and gravity.",
+            "Gas expansion coupled with moving piston dynamics.",
+            "Collisions combined with subsequent projectile or rotational motion."
+        ],
+        "mnemonic_banner": "Find the bridge... Apply constraints... Conserve energy!",
+        "formulas": chapter_formulas[10:12] if len(chapter_formulas) > 10 else []
+    }
+
+    # Sheet 7: High-Frequency Exam Traps, Calculation Fallacies & Boundary Pitfalls
+    s7 = {
+        "page_number": 7,
+        "sheet_title": f"Exam Traps, Calculation Fallacies & Boundary Pitfalls",
+        "chapter": ch,
+        "subject": sub,
+        "class_level": cls,
+        "ncert_ref": f"{base_nref} • Sheet 7 of 8",
+        "importance": imp,
+        "introduction": f"Over 40% of marks lost in {ch} stem from reference-frame mismatches, applying formulas outside validity boundaries, and unit inconsistencies. This sheet details the exact trap patterns set by exam committees and provides foolproof remedies.",
         "classification_heading": "2. High-Frequency Traps & Boundary Fallacies",
         "classification_cases": [
             {
@@ -2122,6 +2464,94 @@ def build_multi_sheets_for_curated(note, chapter_formulas):
             "Applying constant formula approximations when variables depend on position or time.",
             "Mixing non-SI units without standard conversion factors."
         ]),
+        "important_points_heading": "6. Exam Hall Safety Protocols",
+        "important_points": [
+            "Verify dimensional homogeneity of the target variable against choices.",
+            "Confirm whether question asks for magnitude or signed component.",
+            "Check units: convert all inputs to standard SI base units first.",
+            "Verify limiting cases (0 and infinity) before bubbling in the answer."
+        ],
+        "quick_tips": [
+            "Use dimensional verification first.",
+            "Check extreme limits (0 and infinity) to confirm algebraic forms.",
+            "Track vector signs relative to a single chosen origin.",
+            "Look for symmetry to eliminate half the calculation steps."
+        ],
+        "jee_focus_points": [
+            "Tricky boundary cases and sign conventions.",
+            "Hidden assumptions and domain validity constraints.",
+            "Distinguishing conservative from dissipative forces.",
+            "Units conversion traps in numerical questions."
+        ],
+        "mnemonic_banner": "Signs check... Domain check... Base SI units check!",
+        "formulas": chapter_formulas[12:14] if len(chapter_formulas) > 12 else []
+    }
+
+    # Sheet 8: Speed Mastery, Option Elimination & Solved Illustrative JEE Examples
+    s8 = {
+        "page_number": 8,
+        "sheet_title": f"Speed Mastery, Option Elimination & Solved JEE Examples",
+        "chapter": ch,
+        "subject": sub,
+        "class_level": cls,
+        "ncert_ref": f"{base_nref} • Sheet 8 of 8",
+        "importance": imp,
+        "introduction": f"In competitive JEE Main & Advanced exams, speed is as critical as accuracy. Combining systematic option elimination, dimensional analysis filtering, extreme boundary tests, and mastery of worked illustrative examples guarantees peak scoring efficiency.",
+        "classification_heading": "2. High-Speed Option Elimination Protocols",
+        "classification_cases": [
+            {
+                "badge": "(i) Dimensional Analysis Filter",
+                "title": "Dimensional Consistency Check",
+                "condition": "M L T Dimension Invariance",
+                "description": "Inspect the dimensions of all 4 options before attempting full derivation.",
+                "range": "[LHS] = [RHS]",
+                "consequence": "Options with mismatched powers of mass, length, or time are eliminated in under 30 seconds."
+            },
+            {
+                "badge": "(ii) Extreme Limiting Value Test",
+                "title": "Zero & Infinite Parameter Evaluation",
+                "condition": "Limiting Asymptotic State",
+                "description": "Set parameters to 0 or infinity (e.g. $m_2 \\to 0, m_2 \\to \\infty, \\theta \\to 0, \\theta \\to 90^\\circ$).",
+                "range": "x \\to 0, \\quad x \\to \\infty",
+                "consequence": "Matches the resulting formula to physically known static or one-body states, isolating the correct choice."
+            },
+            {
+                "badge": "(iii) Symmetry Cancellation Test",
+                "title": "Coordinate / Physical Symmetry",
+                "condition": "Geometric Symmetrical Setup",
+                "description": "In symmetric geometries, transverse components MUST vanish identically.",
+                "range": "F_y = 0 \\text{ or } E_x = 0",
+                "consequence": "Eliminates options containing non-zero transverse components without any integration."
+            }
+        ],
+        "parameter_heading": "3. Mental Calculation & Elimination Shortcuts",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Standard Numerical Approximations",
+                "rules": [
+                    {"cond": "Gravity & Pi", "res": "$g \\approx \\pi^2 \\approx 9.87 \\approx 10$ m/s²."},
+                    {"cond": "Square Roots", "res": "$\\sqrt{2} \\approx 1.414, \\sqrt{3} \\approx 1.732, \\sqrt{5} \\approx 2.236$."},
+                    {"cond": "Natural Logs", "res": "$\\ln 2 \\approx 0.693, \\ln 10 \\approx 2.303$."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Ratio Comparison Method",
+                "rules": [
+                    {"cond": "Proportionality", "res": "Write $y \\propto x^n$; then $y_2/y_1 = (x_2/x_1)^n$ to bypass computing intermediate constants."},
+                    {"cond": "Percentage Change", "res": "For small changes ($\\% < 5\\%$): $\\Delta y / y \\approx n (\\Delta x / x)$."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. JEE Advanced Quick Elimination Rules",
+            "cases": [
+                "Dimensional consistency check on all 4 options eliminates wrong options in seconds.",
+                "Testing extreme limiting conditions ($x \\to 0, x \\to \\infty$) identifies the correct formula shape.",
+                "Symmetry arguments: in symmetric configurations, transverse forces/fields cancel out identically.",
+                "Conservation checks: Total Energy, Momentum, Mass, or Charge CANNOT change in closed systems."
+            ],
+            "note": "Double check boundary limits and standard units before finalizing your response."
+        },
         "examples": note.get("examples", []),
         "quick_tips": [
             "Use dimensional verification first.",
@@ -2136,23 +2566,29 @@ def build_multi_sheets_for_curated(note, chapter_formulas):
             "Approximation validity criteria."
         ],
         "mnemonic_banner": "Units check... Extreme limits check... Symmetry check!",
-        "formulas": chapter_formulas[7:] if len(chapter_formulas) > 7 else chapter_formulas
+        "formulas": chapter_formulas if chapter_formulas else []
     }
-    
-    return [s1, s2, s3]
+
+    return [s1, s2, s3, s4, s5, s6, s7, s8]
 
 
 def build_multi_sheets_for_synthesized(synth_note, chapter_name, subject, class_level, ncert_order, importance, topics, chapter_formulas):
     """
-    Builds a 3-sheet notebook collection for synthesized chapters:
-    Sheet 1: Core Definitions, Principles & Classifications (Topics 0 & 1)
-    Sheet 2: Analytical Formulations, Graphs & Case Studies (Topics 2 & 3)
-    Sheet 3: Exam Traps, Fast Elimination Tricks & Solved Examples (Topics 4+, Pitfalls, Examples)
+    Builds an 8-sheet comprehensive notebook booklet for synthesized chapters:
+    Sheet 1: Core Definitions, Foundational Principles & NCERT Scope (Topic 0)
+    Sheet 2: Governing Mathematical Relations & Primary Balances (Topic 1)
+    Sheet 3: Analytical Formulations, Graphs & Characteristic Coordinate Curves (Topic 2)
+    Sheet 4: Parameter Variations, Extreme Limits & Boundary Edge Cases (Topic 3)
+    Sheet 5: Advanced Subtopics & Specialized JEE Advanced Transformations (Topic 4+)
+    Sheet 6: Cross-Chapter Synthesis & Multi-Concept Coupling
+    Sheet 7: High-Frequency Exam Traps, Calculation Fallacies & Boundary Pitfalls
+    Sheet 8: Speed Mastery, Option Elimination & Solved Illustrative JEE Examples
     """
     t0 = topics[0] if topics else chapter_name
     t1 = topics[1] if len(topics) > 1 else t0
     t2 = topics[2] if len(topics) > 2 else "Analytical Formulations & Coordinate Dynamics"
     t3 = topics[3] if len(topics) > 3 else "Boundary Limits & Critical Thresholds"
+    t4 = topics[4] if len(topics) > 4 else f"Advanced Formulations in {chapter_name}"
     nref = f"Class {class_level}, Chapter {ncert_order}: {chapter_name}"
     
     # Sheet 1: Foundational Principles & Classifications
@@ -2162,101 +2598,456 @@ def build_multi_sheets_for_synthesized(synth_note, chapter_name, subject, class_
     s1["chapter"] = chapter_name
     s1["subject"] = subject
     s1["class_level"] = class_level
-    s1["ncert_ref"] = nref
+    s1["ncert_ref"] = f"{nref} • Sheet 1 of 8"
     s1["importance"] = importance
-    s1["formulas"] = chapter_formulas[:3] if chapter_formulas else []
+    s1["formulas"] = chapter_formulas[:2] if chapter_formulas else []
     
-    # Sheet 2: Analytical Formulations, Curves & Case Studies
+    # Sheet 2: Governing Mathematical Relations & Balance Equations
     s2 = {
         "page_number": 2,
-        "sheet_title": f"{t1} & Analytical Coordinate Dynamics",
+        "sheet_title": f"{t1}: Governing Relations & Primary Balances",
         "chapter": chapter_name,
         "subject": subject,
         "class_level": class_level,
-        "ncert_ref": nref,
+        "ncert_ref": f"{nref} • Sheet 2 of 8",
         "importance": importance,
-        "introduction": f"Analytical relations in {t1} and {t2} govern physical and mathematical transformations across varying parameters. Establishing coordinate origins and testing asymptotic bounds ensures rigorous derivations.",
-        "classification_heading": f"2. Operational Boundaries & Regimes in {t1}",
+        "introduction": f"Governing relations in {t1} establish fundamental balance equations between dependent and independent state coordinates. Mathematical rigor requires tracking vector orientations and establishing consistent sign conventions.",
+        "classification_heading": f"2. Primary Governing Forms in {t1}",
         "classification_cases": [
             {
-                "badge": f"(i) Linear / Leading-Order Regime ({t1})",
+                "badge": f"(i) Differential Balance Form ({t1})",
+                "title": "Instantaneous Rate Formulation",
+                "condition": "dt -> 0 or dx -> 0",
+                "description": f"Local gradients and time-rates of change connecting system fluxes across {t1}.",
+                "range": "df/dt \\text{ or } \\nabla \\cdot \\vec{J}",
+                "consequence": "Governs local dynamics and yields first-order or second-order differential equations."
+            },
+            {
+                "badge": f"(ii) Integral Accumulation Form ({t1})",
+                "title": "Accumulation & Enclosed Boundary",
+                "condition": "Continuous Domain Integration",
+                "description": f"Macroscopic area, volume, or line accumulation over finite path boundaries.",
+                "range": "\\int_{x_1}^{x_2} f(x) dx \\text{ or } \\oint \\vec{F} \\cdot d\\vec{r}",
+                "consequence": "Evaluates total work, charge, mass, or flux enclosed within domain boundaries."
+            },
+            {
+                "badge": f"(iii) Transform & Identity Representation ({t1})",
+                "title": "Algebraic & Geometric Identities",
+                "condition": "Transformation Invariants",
+                "description": f"Coordinate transformations and algebraic substitutions simplifying {t1}.",
+                "range": "x \\to u(x), \\quad t \\to \\tau",
+                "consequence": "Decouples complex coupled equations into standard solvable canonical forms."
+            }
+        ],
+        "parameter_heading": f"3. Direction & Vector Properties in {t1}",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Sign Conventions & Coordinate Origin",
+                "rules": [
+                    {"cond": "Rightward / Upward / Outward", "res": "Designate as positive standard direction."},
+                    {"cond": "Counter-clockwise / Repulsive", "res": "Positive angular or field displacement."},
+                    {"cond": "Inward / Dissipative / Binding", "res": "Negative sign marks potential wells and energy sinks."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) First and Second Derivative Properties",
+                "rules": [
+                    {"cond": "Gradient df/dx > 0", "res": "Strictly increasing parameter response."},
+                    {"cond": "Gradient df/dx = 0", "res": "Stationary equilibrium or local extremum."},
+                    {"cond": "Concavity d²f/dx²", "res": "Curvature sign dictates stable vs unstable equilibrium."}
+                ]
+            }
+        ],
+        "graphical_view": synth_note.get("graphical_view"),
+        "important_points_heading": f"6. Governing Laws & Identities in {t1}",
+        "important_points": [
+            f"Always establish a fixed coordinate origin before setting up balance equations in {t1}.",
+            f"Conserve total system invariants (energy, mass, charge, momentum) across transformations.",
+            f"Verify boundary continuity across physical interfaces or state boundaries.",
+            f"Check dimensional homogeneity of every individual term in derived relations."
+        ],
+        "quick_tips": [
+            f"Use ratio comparisons between initial and final states to cancel constants.",
+            f"Exploit geometric symmetry to halve integration paths.",
+            f"Check if forces are conservative before applying line integrals.",
+            f"Use small-angle linearizations only when deviations are strictly < 5 degrees."
+        ],
+        "jee_focus_points": [
+            f"Differential equation formulation in {t1}.",
+            f"Work, energy, and flux integrals across non-uniform geometries.",
+            f"Sign conventions and vector component projections.",
+            f"Equilibrium condition verification."
+        ],
+        "mnemonic_banner": "Fix the origin... Project vector components... Conserve invariants!",
+        "formulas": chapter_formulas[2:4] if len(chapter_formulas) > 2 else []
+    }
+    
+    # Sheet 3: Analytical Formulations, Graphs & Characteristic Coordinate Curves
+    s3 = {
+        "page_number": 3,
+        "sheet_title": f"{t2}: Coordinate Dynamics & Response Curves",
+        "chapter": chapter_name,
+        "subject": subject,
+        "class_level": class_level,
+        "ncert_ref": f"{nref} • Sheet 3 of 8",
+        "importance": importance,
+        "introduction": f"Characteristic coordinate curves in {t2} reveal physical phase spaces, potential energy landscapes, and response trajectories. Slope tangents and enclosed areas correspond directly to key physical observables.",
+        "classification_heading": f"2. Operational Boundaries & Regimes in {t2}",
+        "classification_cases": [
+            {
+                "badge": f"(i) Linear / Leading-Order Regime ({t2})",
                 "title": "Linear / Leading-Order Regime",
                 "condition": "Small Perturbation / Dilute Limit",
-                "description": f"First-order behavior where rate equations simplify linearly across {t1}.",
+                "description": f"First-order behavior where rate equations simplify linearly across {t2}.",
                 "range": "x \\ll 1",
                 "consequence": "Linear superposition and first derivatives govern the response."
             },
             {
                 "badge": f"(ii) Steady Dynamic State ({t2})",
-                "title": f"Steady Dynamic State: {t2}",
+                "title": "Steady Dynamic State",
                 "condition": "Equilibrium & Energy Conservation",
                 "description": "Stable operating regime where driving forces balance dissipative resistance.",
                 "range": "df/dt = 0 \\text{ or } F_{net} = 0",
                 "consequence": "State variables achieve equilibrium values; net rate of accumulation is zero."
             },
             {
-                "badge": f"(iii) Critical / Saturation Threshold ({t3})",
-                "title": f"Critical Threshold & Saturation: {t3}",
+                "badge": f"(iii) Critical / Saturation Threshold ({t2})",
+                "title": "Critical Threshold & Saturation",
                 "condition": "Extreme Boundary Condition",
                 "description": "Limit where non-linear feedback or capacity saturation occurs.",
                 "range": "x \\to x_{crit}",
                 "consequence": "Abrupt phase transition, resonance peak, or asymptote reached."
             }
         ],
-        "parameter_heading": f"3. Parameter & Coordinate Variations in {t2}",
+        "parameter_heading": f"3. Slope & Area Physical Interpretations",
         "parameter_analysis": [
             {
-                "sub_badge": f"(i) Rate of Change & Derivative Tests ({t1})",
+                "sub_badge": "(i) Derivative / Tangent Slope Meaning",
                 "rules": [
-                    {"cond": "First Derivative df/dx > 0", "res": "Quantity strictly increasing with parameter."},
-                    {"cond": "First Derivative df/dx = 0", "res": "Stationary critical point / local extremum."},
-                    {"cond": "Second Derivative d²f/dx²", "res": "Concavity and inflection mark stability changes."}
+                    {"cond": "Slope of Curve", "res": "Represents instantaneous rate of change (e.g. v = dx/dt, F = -dU/dx, I = dq/dt)."},
+                    {"cond": "Zero Slope Point", "res": "Marks maximum, minimum, or neutral equilibrium state."},
+                    {"cond": "Curvature Sign", "res": "Positive curvature = stable potential well; negative curvature = unstable hill."}
                 ]
             },
             {
-                "sub_badge": f"(ii) Parameter Scaling & Ratios ({t2})",
+                "sub_badge": "(ii) Definite Integral / Enclosed Area Meaning",
                 "rules": [
-                    {"cond": "Direct Scaling", "res": "Power-law scaling determines curve steepness."},
-                    {"cond": "Inverse Scaling", "res": "Asymptotic hyperbolic decay toward axis."},
-                    {"cond": "Dimensionless Ratios", "res": "Determines regime dominance (e.g. Reynolds / Mach / Q-factor)."}
+                    {"cond": "Area Under Curve", "res": "Represents accumulated physical work, impulse, flux, or total change: $\\Delta F = \\int y dx$."},
+                    {"cond": "Clockwise Closed Loop", "res": "Positive net work done or energy generated by system."},
+                    {"cond": "Counter-clockwise Loop", "res": "Work absorbed / negative net work in thermodynamic/hysteresis cycles."}
                 ]
             }
         ],
-        "interval_rules": synth_note.get("interval_rules"),
         "graphical_view": synth_note.get("graphical_view"),
-        "important_points_heading": f"6. Key Analytical Invariants in {chapter_name}",
+        "special_cases": {
+            "title": "4. Coordinate Boundary Intercepts & Asymptotes",
+            "cases": [
+                "x-Intercept ($y = 0$): Physical zeros, ground states, or equilibrium contact points.",
+                "y-Intercept ($x = 0$): Initial conditions at $t = 0$ or field value at origin.",
+                "Horizontal Asymptote ($x \\to \\pm \\infty$): Terminal velocity, saturation capacity, or steady-state limit.",
+                "Vertical Asymptote ($x \\to x_0$): Resonance singularity, barrier breakdown, or infinite force barrier."
+            ],
+            "note": "Always check whether physical systems can reach or cross asymptotic limits!"
+        },
+        "important_points_heading": f"6. Key Coordinate Properties in {t2}",
         "important_points": [
-            f"Always establish an unambiguous origin and positive coordinate axis for {chapter_name}.",
-            f"Conserve total system invariants (energy, momentum, mass, charge) across all transitions.",
-            f"Boundary values at interfaces must satisfy continuity of state functions.",
-            f"Check dimensional homogeneity of every term before numerical calculation."
+            f"Slopes of graphs in {t2} define instantaneous intensive properties.",
+            f"Enclosed areas represent extensive physical accumulation across state paths.",
+            f"Phase plots ($v$ vs $x$ or $P$ vs $V$) are invariant under coordinate translation.",
+            f"Stable equilibrium points correspond strictly to local minima of potential curves."
         ],
         "quick_tips": [
-            f"Use ratio comparisons between two states to eliminate unmeasured constants in {t1}.",
-            f"Exploit geometric or coordinate symmetry to halve integration domains.",
-            f"Confirm whether dynamic equilibrium applies before writing differential balances.",
-            f"Look for logarithmic or exponential asymptotic decays."
+            "✓ Area of cycle = net work: Clockwise > 0, Counter-clockwise < 0.",
+            "✓ Slope of tangent = instantaneous rate; slope of secant = average rate.",
+            "✓ Identify inflection points where second derivative flips sign.",
+            "✓ Check units of (y-axis × x-axis) to verify the physical quantity represented by area."
         ],
         "jee_focus_points": [
-            f"Analytical curve analysis and interpretation of slopes/areas in {t1}.",
-            f"Coupled multi-step transformations in {t2}.",
-            f"Boundary value problems and critical threshold calculations.",
-            f"Non-linear scaling and log-log coordinate plots."
+            f"Slope and area calculation from experimental/conceptual graphs in {t2}.",
+            "Potential energy curves and equilibrium classification.",
+            "Cyclic process efficiency and enclosed area determination.",
+            "Asymptotic convergence and stability."
         ],
-        "mnemonic_banner": "Check boundaries... Confirm sign conventions... Conserve invariants!",
-        "formulas": chapter_formulas[3:7] if len(chapter_formulas) > 3 else chapter_formulas
+        "mnemonic_banner": "Slope gives the rate... Area gives the accumulation!",
+        "formulas": chapter_formulas[4:6] if len(chapter_formulas) > 4 else []
     }
     
-    # Sheet 3: Exam Traps, Rapid Elimination & Solved Numerical Examples
-    s3 = {
-        "page_number": 3,
-        "sheet_title": f"Exam Traps, Rapid Tricks & Solved Examples",
+    # Sheet 4: Parameter Variations, Extreme Limits & Boundary Edge Cases
+    s4 = {
+        "page_number": 4,
+        "sheet_title": f"{t3}: Parameter Variations & Asymptotic Limits",
         "chapter": chapter_name,
         "subject": subject,
         "class_level": class_level,
-        "ncert_ref": nref,
+        "ncert_ref": f"{nref} • Sheet 4 of 8",
         "importance": importance,
-        "introduction": f"JEE Main and Advanced questions on {chapter_name} frequently test boundary edge cases, reference-frame shifts, and dimensional traps. Deploying elimination algorithms avoids standard pitfalls.",
+        "introduction": f"Examining behavior under extreme parameter values ($x \\to 0, x \\to \\infty, t \\to 0, t \\to \\infty$) is a powerful analytical tool in {t3}. Verifying that complex expressions reduce to known classical limits validates models and eliminates incorrect options.",
+        "classification_heading": f"2. Asymptotic & Extreme Regimes in {t3}",
+        "classification_cases": [
+            {
+                "badge": "(i) Zero / Low Limit (x -> 0)",
+                "title": "Perturbation / Dilute Limit",
+                "condition": "x << 1 or t -> 0",
+                "description": "Initial state behavior where higher-order nonlinear powers can be neglected.",
+                "range": "x \\to 0",
+                "consequence": "Taylor series expansion yields leading linear approximation: $f(x) \\approx f(0) + f'(0)x$."
+            },
+            {
+                "badge": "(ii) Intermediate Transition Regime",
+                "title": "Crossover / Characteristic Scale",
+                "condition": "x ~ x_characteristic",
+                "description": "Regime where competing physical mechanisms (e.g. inertia vs friction) are comparable.",
+                "range": "x \\approx x_0",
+                "consequence": "Maximum sensitivity, resonance peak, or inflection transition occurs."
+            },
+            {
+                "badge": "(iii) Infinite / Asymptotic Limit (x -> ∞)",
+                "title": "Saturation / Far-Field Limit",
+                "condition": "x >> 1 or t -> inf",
+                "description": "Long-term convergence, saturation, or point-source far-field approximations.",
+                "range": "x \\to \\infty",
+                "consequence": "Constant saturation value or power-law decay ($1/r, 1/r^2$) dominates."
+            }
+        ],
+        "parameter_heading": "3. Extreme Limiting Value Test Protocols",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Static / Initial Boundary (t = 0)",
+                "rules": [
+                    {"cond": "Capacitor / Spring at t=0", "res": "Uncharged capacitor acts as short circuit (wire); unextended spring exerts zero force."},
+                    {"cond": "Inductor at t=0", "res": "Acts as open circuit (infinite resistance) opposing instantaneous current change."},
+                    {"cond": "Initial Velocity", "res": "Kinetic energy terms equal $\\frac{1}{2}m u^2$; static friction reaches max $\\mu_s N$ before slip."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Long-Term Steady State (t -> ∞)",
+                "rules": [
+                    {"cond": "Capacitor at t -> inf", "res": "Fully charged; acts as open circuit ($i = 0$ in that branch)."},
+                    {"cond": "Inductor at t -> inf", "res": "Steady current; acts as ideal wire ($V_L = L di/dt = 0$)."},
+                    {"cond": "Terminal Speed", "res": "Drag force balances driving force ($F_{net} = 0 \\implies v = v_t$)."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. Rapid Boundary Verification Box",
+            "cases": [
+                "Test $\\theta = 0^\\circ$ and $\\theta = 90^\\circ$: Expressions must reduce to horizontal or vertical canonical cases.",
+                "Test $m_1 = m_2$: Equal mass collisions must demonstrate complete velocity exchange.",
+                "Test $R \\to \\infty$: Flat Earth or plane surface limit must recover standard uniform equations.",
+                "Test $T \\to 0$ K: Thermal excitations freeze out; entropies approach zero by Third Law."
+            ],
+            "note": "If an expression fails at any known extreme boundary, it is 100% physically incorrect!"
+        },
+        "important_points_heading": "6. Asymptotic Theorems & Limiting Laws",
+        "important_points": [
+            "Every correct physical formula must remain valid at zero and infinite limits.",
+            "Dimensional consistency is preserved at all asymptotic boundaries.",
+            "Perturbation series must converge smoothly back to the unperturbed state.",
+            "Energy is strictly conserved across transient transitions into steady states."
+        ],
+        "quick_tips": [
+            "✓ Set variable to 0 to eliminate 2 of 4 options in seconds.",
+            "✓ Set variable to infinity to verify asymptotic decay power.",
+            "✓ Check symmetric cases ($m_1=m_2$ or $\\theta=45^\\circ$) for rapid verification.",
+            "✓ For exponential decay $e^{-t/\\tau}$, at $t = \\tau$ remaining fraction is $36.8\\%$."
+        ],
+        "jee_focus_points": [
+            "Transient to steady-state transitions.",
+            "Small-parameter series expansions and validity regimes.",
+            "Far-field approximations ($r \\gg d$).",
+            "Terminal state calculations across fluid and electromagnetic circuits."
+        ],
+        "mnemonic_banner": "Test zero... Test infinity... Check the asymptotic decay!",
+        "formulas": chapter_formulas[6:8] if len(chapter_formulas) > 6 else []
+    }
+    
+    # Sheet 5: Advanced Subtopics & Specialized JEE Advanced Transformations
+    s5 = {
+        "page_number": 5,
+        "sheet_title": f"{t4}: Specialized JEE Advanced Transformations",
+        "chapter": chapter_name,
+        "subject": subject,
+        "class_level": class_level,
+        "ncert_ref": f"{nref} • Sheet 5 of 8",
+        "importance": importance,
+        "introduction": f"JEE Advanced problems in {chapter_name} frequently combine non-standard configurations, non-inertial reference frames, variable mass/field distributions, and tensor transformations. Mastering specialized canonical templates ensures rapid problem setup.",
+        "classification_heading": f"2. Specialized Problem Configurations in {t4}",
+        "classification_cases": [
+            {
+                "badge": "(i) Non-Inertial / Accelerated Frames",
+                "title": "Pseudo-Force & Effective Potential",
+                "condition": "Reference Frame Accelerates (a_frame != 0)",
+                "description": "Transforming into an accelerated frame requires introducing fictitious pseudo-forces $\\vec{F}_p = -m\\vec{a}_{frame}$.",
+                "range": "\\vec{g}_{eff} = \\vec{g} - \\vec{a}_{frame}",
+                "consequence": "Converts complex multi-body accelerated motion into standard static equilibrium."
+            },
+            {
+                "badge": "(ii) Continuous Variable Distribution",
+                "title": "Calculus Element Integration",
+                "condition": "Non-Uniform Density / Field",
+                "description": "Slice the continuous body into differential elements ($dm = \\lambda dx, dq = \\sigma dA$) and integrate.",
+                "range": "F = \\int dF, \\quad U = \\int dU",
+                "consequence": "Must express element coordinates in terms of a single integration variable before solving."
+            },
+            {
+                "badge": "(iii) Coupled Multi-Degree of Freedom States",
+                "title": "Coupled Oscillations & Normal Modes",
+                "condition": "Interacting Dual Components",
+                "description": "Systems where motion of body A exerts reactive force on body B (e.g. dual spring-mass, coupled pendulums).",
+                "range": "\\omega_1, \\omega_2 \\text{ (Normal Frequencies)}",
+                "consequence": "Use center-of-mass coordinates or relative coordinates to decouple equations of motion."
+            }
+        ],
+        "parameter_heading": "3. Advanced Symmetry & Superposition Techniques",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Cavity & Negative Mass / Charge Superposition",
+                "rules": [
+                    {"cond": "Step 1", "res": "Consider full complete body without cavity (mass $M_0$, charge $Q_0$)."},
+                    {"cond": "Step 2", "res": "Fill the cavity with fictitious negative mass ($-m_c$) or negative charge ($-q_c$)."},
+                    {"cond": "Step 3", "res": "Superimpose fields: $\\vec{E}_{net} = \\vec{E}_{solid} + \\vec{E}_{negative\\_cavity}$."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Center of Mass / Reduced Mass System",
+                "rules": [
+                    {"cond": "Two-Body System", "res": "Replace two interacting bodies with single reduced mass $\\mu = \\frac{m_1 m_2}{m_1 + m_2}$."},
+                    {"cond": "Internal Energy", "res": "$K_{total} = \\frac{1}{2}(m_1+m_2)v_{cm}^2 + \\frac{1}{2}\\mu v_{rel}^2$."},
+                    {"cond": "Zero Net External Force", "res": "Center of mass moves with constant velocity; internal collisions conserve momentum."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. JEE Advanced Master Formulas & Templates",
+            "cases": [
+                "Reduced Mass: $\\mu = \\frac{m_1 m_2}{m_1 + m_2}$ converts two-body planetary/spring orbits into one-body problem.",
+                "Cavity Theorem: Electric field inside a spherical cavity in a uniformly charged sphere is UNIFORM: $\\vec{E} = \\frac{\\rho}{3\\epsilon_0}\\vec{d}$.",
+                "Perpendicular Axes: $I_z = I_x + I_y$ applies STRICTLY to planar 2D laminas in the xy-plane.",
+                "Variable Mass Rocket: $m \\frac{dv}{dt} = F_{ext} + v_{rel} \\frac{dm}{dt}$ accounts for mass ejection flux."
+            ],
+            "note": "Do not apply planar theorems (like perpendicular axis theorem) to 3D solid objects!"
+        },
+        "important_points_heading": "6. Advanced Invariants & Normal Modes",
+        "important_points": [
+            "Pseudo-force line of action passes through the center of mass of the observed body.",
+            "Cavity problems are solved by addition of a complete solid and a negative cavity.",
+            "In reduced mass systems, relative acceleration is $a_{rel} = F_{int}/\\mu$.",
+            "Angular momentum is conserved about any point where net external torque vanishes."
+        ],
+        "quick_tips": [
+            "✓ Use reduced mass $\\mu = m_1 m_2 / (m_1 + m_2)$ for two-block spring systems.",
+            "✓ Inside uniformly charged sphere cavity, field is constant $\\vec{E} = \\rho \\vec{d} / (3\\epsilon_0)$.",
+            "✓ In accelerated elevators, replace $g$ with $g_{eff} = g \\pm a$.",
+            "✓ Choose torque axis passing through unknown normal forces to eliminate them."
+        ],
+        "jee_focus_points": [
+            "Cavity problems in gravitation, electrostatics, and rotational inertia.",
+            "Reduced mass formulation in spring-block oscillations and planetary orbits.",
+            "Non-inertial pseudo forces and effective gravity.",
+            "Variable mass rocket and rope falling problems."
+        ],
+        "mnemonic_banner": "Cavity = Complete + Negative... Two bodies = Reduced mass!",
+        "formulas": chapter_formulas[8:10] if len(chapter_formulas) > 8 else []
+    }
+    
+    # Sheet 6: Cross-Chapter Synthesis & Multi-Concept Coupling
+    s6 = {
+        "page_number": 6,
+        "sheet_title": f"Cross-Chapter Synthesis & Hybrid Problem Templates",
+        "chapter": chapter_name,
+        "subject": subject,
+        "class_level": class_level,
+        "ncert_ref": f"{nref} • Sheet 6 of 8",
+        "importance": importance,
+        "introduction": f"Over 65% of JEE Advanced questions combine {chapter_name} with adjacent domains (e.g. Mechanics + Calculus, Thermodynamics + Kinetics, Electrostatics + SHM). Recognizing standard cross-chapter coupling archetypes is essential for top rankers.",
+        "classification_heading": "2. Primary Multi-Concept Coupling Archetypes",
+        "classification_cases": [
+            {
+                "badge": "(i) Field Theory + Simple Harmonic Motion",
+                "title": "Equilibrium Displacement & Small SHM",
+                "condition": "Small Perturbation around Stable Equilibrium",
+                "description": "A particle in electric, gravitational, or fluid field is displaced slightly by $x$.",
+                "range": "F_{restoring} = -kx \\implies \\omega = \\sqrt{k/m}",
+                "consequence": "Expand potential $U(x)$ around minimum: $k_{eff} = \\left.\\frac{d^2 U}{dx^2}\\right|_{x_0}$ yields time period $T = 2\\pi\\sqrt{m/k_{eff}}$."
+            },
+            {
+                "badge": "(ii) Conservation Laws + Calculus Integration",
+                "title": "Continuously Varying Parameters",
+                "condition": "Non-Uniform Spatial or Time Variation",
+                "description": "Forces, heat capacities, or resistance varying with coordinates ($F(x), C_p(T), R(t)$).",
+                "range": "W = \\int F(x) dx, \\quad \\Delta H = \\int C_p dT",
+                "consequence": "Must set up differential element and integrate between initial and final state boundaries."
+            },
+            {
+                "badge": "(iii) Energy Partitioning + Geometry / Trigonometry",
+                "title": "Geometric Constraints & Energy Allocation",
+                "condition": "Rigid Invariant Constraints",
+                "description": "String constraints, inclined wedge surfaces, or lens focal intersections bounding degrees of freedom.",
+                "range": "\\Sigma \\vec{T} \\cdot \\vec{v} = 0, \\quad v_x = v_y \\cot \\theta",
+                "consequence": "Geometric constraint equations reduce the number of independent variables before applying energy balances."
+            }
+        ],
+        "parameter_heading": "3. Multi-Concept Problem Decomposition Protocol",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Three-Phase Problem Decomposition",
+                "rules": [
+                    {"cond": "Phase 1: Geometry / Kinematics", "res": "Establish coordinate axes and geometric constraint relations between bodies."},
+                    {"cond": "Phase 2: Dynamics / Conservation", "res": "Write balance equations: $\\Sigma F = ma$, energy conservation, momentum conservation."},
+                    {"cond": "Phase 3: Calculus / Differential Setup", "res": "If variables vary, formulate $m v dv/dx$ or $\\int dq$ and integrate."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Inter-Domain Bridging Variables",
+                "rules": [
+                    {"cond": "Coupling Variable", "res": "Identify the shared physical bridge (e.g. Velocity $v$, Charge $q$, Temperature $T$, Normal force $N$)."},
+                    {"cond": "Elimination Order", "res": "Eliminate auxiliary internal reaction forces first; solve for target observable directly."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. High-Frequency Cross-Chapter Bridging Formulas",
+            "cases": [
+                "Small Oscillations from Potential: $T = 2\\pi \\sqrt{\\frac{m}{U''(x_0)}}$ where $U'(x_0) = 0$ and $U''(x_0) > 0$.",
+                "Work-Energy Theorem: $W_{conservative} + W_{non-conservative} + W_{pseudo} = \\Delta K$.",
+                "Thermodynamics in Mechanics: Work done by gas on piston $W = \\int P dV$ accelerates piston mass: $W - \\text{losses} = \\frac{1}{2}M v^2$.",
+                "Electromagnetic Induction in Mechanics: Induced current produces Lorentz braking force $F = B I L = \\frac{B^2 L^2 v}{R}$, yielding terminal velocity."
+            ],
+            "note": "Cross-chapter problems always require combining equations from two different chapters to solve for the common bridge!"
+        },
+        "important_points_heading": "6. Synthesis Invariants & Inter-Domain Rules",
+        "important_points": [
+            "Total mechanical energy is conserved only when non-conservative work $W_{nc} = 0$.",
+            "Stable equilibrium occurs at potential minimum ($dU/dx = 0, d^2U/dx^2 > 0$); oscillation frequency is $\\sqrt{U''/m}$.",
+            "String and wedge constraint: Total virtual work by tension on rigid connected strings is zero: $\\Sigma \\vec{T} \\cdot \\vec{a} = 0$.",
+            "Magnetic braking forces are velocity-dependent; acceleration decreases exponentially toward terminal state."
+        ],
+        "quick_tips": [
+            "✓ To find SHM time period from potential $U(x)$, compute second derivative $k = d^2U/dx^2$ at minimum.",
+            "✓ Virtual work shortcut: $\\Sigma T \\cdot v = 0$ finds relation between accelerations instantly.",
+            "✓ Identify the bridging variable (e.g. common speed, common temperature) linking both sub-systems.",
+            "✓ Check if angular momentum is conserved about the point of collision."
+        ],
+        "jee_focus_points": [
+            "Potential energy curves and small oscillation time period.",
+            "Induced EMF in moving conducting rods with friction and gravity.",
+            "Gas expansion coupled with moving piston dynamics.",
+            "Collisions combined with subsequent projectile or rotational motion."
+        ],
+        "mnemonic_banner": "Find the bridge... Apply constraints... Conserve energy!",
+        "formulas": chapter_formulas[10:12] if len(chapter_formulas) > 10 else []
+    }
+    
+    # Sheet 7: High-Frequency Exam Traps, Calculation Fallacies & Boundary Pitfalls
+    s7 = {
+        "page_number": 7,
+        "sheet_title": f"Exam Traps, Calculation Fallacies & Boundary Pitfalls",
+        "chapter": chapter_name,
+        "subject": subject,
+        "class_level": class_level,
+        "ncert_ref": f"{nref} • Sheet 7 of 8",
+        "importance": importance,
+        "introduction": f"Over 40% of marks lost by JEE aspirants in {chapter_name} stem from sign inversion, applying formulas outside their valid domains, and neglecting boundary limits. This sheet details the exact trap patterns set by exam committees and provides foolproof remedies.",
         "classification_heading": "2. High-Frequency Traps & Boundary Fallacies",
         "classification_cases": [
             {
@@ -2318,7 +3109,13 @@ def build_multi_sheets_for_synthesized(synth_note, chapter_name, subject, class_
             f"Applying constant-rate formulas when parameters vary with time or displacement.",
             f"Mixing non-SI units without converting to base SI units."
         ]),
-        "examples": synth_note.get("examples", []),
+        "important_points_heading": "6. Exam Hall Safety Protocols",
+        "important_points": [
+            "Before bubbling answer, verify dimensional consistency of final expression.",
+            "Verify units: Ensure work/energy is in Joules, power in Watts, temperature in Kelvin.",
+            "Confirm whether question asks for magnitude, component, or vector direction.",
+            "Check extreme limits ($0$ and $\\infty$) to ensure answer behaves reasonably."
+        ],
         "quick_tips": [
             "Use dimensional verification first to eliminate invalid choices.",
             "Check extreme limits (0 and infinity) to verify algebraic forms.",
@@ -2332,10 +3129,92 @@ def build_multi_sheets_for_synthesized(synth_note, chapter_name, subject, class_
             "Approximation validity criteria."
         ],
         "mnemonic_banner": "Units check... Extreme limits check... Symmetry check!",
-        "formulas": chapter_formulas[7:] if len(chapter_formulas) > 7 else chapter_formulas
+        "formulas": chapter_formulas[12:14] if len(chapter_formulas) > 12 else []
     }
     
-    return [s1, s2, s3]
+    # Sheet 8: Speed Mastery, Option Elimination & Solved Illustrative JEE Examples
+    s8 = {
+        "page_number": 8,
+        "sheet_title": f"Speed Mastery, Option Elimination & Solved JEE Examples",
+        "chapter": chapter_name,
+        "subject": subject,
+        "class_level": class_level,
+        "ncert_ref": f"{nref} • Sheet 8 of 8",
+        "importance": importance,
+        "introduction": f"In competitive JEE Main & Advanced exams, speed is as critical as accuracy. Combining systematic option elimination, dimensional analysis filtering, extreme boundary tests, and mastery of worked illustrative examples guarantees peak scoring efficiency.",
+        "classification_heading": "2. High-Speed Option Elimination Protocols",
+        "classification_cases": [
+            {
+                "badge": "(i) Dimensional Analysis Filter",
+                "title": "Dimensional Consistency Check",
+                "condition": "M L T Dimension Invariance",
+                "description": "Inspect the dimensions of all 4 options before attempting full derivation.",
+                "range": "[LHS] = [RHS]",
+                "consequence": "Options with mismatched powers of mass, length, or time are eliminated in under 30 seconds."
+            },
+            {
+                "badge": "(ii) Extreme Limiting Value Test",
+                "title": "Zero & Infinite Parameter Evaluation",
+                "condition": "Limiting Asymptotic State",
+                "description": "Set parameters to 0 or infinity (e.g. $m_2 \\to 0, m_2 \\to \\infty, \\theta \\to 0, \\theta \\to 90^\\circ$).",
+                "range": "x \\to 0, \\quad x \\to \\infty",
+                "consequence": "Matches the resulting formula to physically known static or one-body states, isolating the correct choice."
+            },
+            {
+                "badge": "(iii) Symmetry Cancellation Test",
+                "title": "Coordinate / Physical Symmetry",
+                "condition": "Geometric Symmetrical Setup",
+                "description": "In symmetric geometries, transverse components MUST vanish identically.",
+                "range": "F_y = 0 \\text{ or } E_x = 0",
+                "consequence": "Eliminates options containing non-zero transverse components without any integration."
+            }
+        ],
+        "parameter_heading": "3. Mental Calculation & Elimination Shortcuts",
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Standard Numerical Approximations",
+                "rules": [
+                    {"cond": "Gravity & Pi", "res": "$g \\approx \\pi^2 \\approx 9.87 \\approx 10$ m/s²."},
+                    {"cond": "Square Roots", "res": "$\\sqrt{2} \\approx 1.414, \\sqrt{3} \\approx 1.732, \\sqrt{5} \\approx 2.236$."},
+                    {"cond": "Natural Logs", "res": "$\\ln 2 \\approx 0.693, \\ln 10 \\approx 2.303$."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Ratio Comparison Method",
+                "rules": [
+                    {"cond": "Proportionality", "res": "Write $y \\propto x^n$; then $y_2/y_1 = (x_2/x_1)^n$ to bypass computing intermediate constants."},
+                    {"cond": "Percentage Change", "res": "For small changes ($\\% < 5\\%$): $\\Delta y / y \\approx n (\\Delta x / x)$."}
+                ]
+            }
+        ],
+        "special_cases": {
+            "title": "4. JEE Advanced Quick Elimination Rules",
+            "cases": [
+                "Dimensional consistency check on all 4 options eliminates wrong options in seconds.",
+                "Testing extreme limiting conditions ($x \\to 0, x \\to \\infty$) identifies the correct formula shape.",
+                "Symmetry arguments: in symmetric configurations, transverse forces/fields cancel out identically.",
+                "Conservation checks: Total Energy, Momentum, Mass, or Charge CANNOT change in closed systems."
+            ],
+            "note": "Double check boundary limits and standard units before finalizing your response."
+        },
+        "examples": synth_note.get("examples", []),
+        "quick_tips": [
+            "Use dimensional verification first to eliminate invalid choices.",
+            "Check extreme limits (0 and infinity) to verify algebraic forms.",
+            "Track vector signs relative to a single fixed origin.",
+            "Look for symmetry to eliminate redundant calculation steps."
+        ],
+        "jee_focus_points": [
+            f"Multi-concept synthesis problems in {chapter_name}.",
+            "Calculus integration across non-uniform distributions.",
+            "Sign conventions and reference frame transformations.",
+            "Approximation validity criteria."
+        ],
+        "mnemonic_banner": "Dimension check... Limit test... Eliminate wrong options fast!",
+        "formulas": chapter_formulas if chapter_formulas else []
+    }
+    
+    return [s1, s2, s3, s4, s5, s6, s7, s8]
 
 
 def generate_notes_for_chapter(chapter_name):

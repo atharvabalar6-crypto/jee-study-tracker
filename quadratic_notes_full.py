@@ -102,8 +102,82 @@ def generate_quadratic_svg_page5():
     </svg>
     """
 
+def generate_quadratic_svg_page7():
+    """Page 7 graphical view: Modulus parabola y = |f(x)| folded over x-axis with line y = k cutting at 4 roots."""
+    return """
+    <svg viewBox="0 0 460 160" class="w-full h-auto max-w-[450px] mx-auto select-none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="120" x2="440" y2="120" stroke="#475569" stroke-width="1.8"/>
+      <line x1="230" y1="150" x2="230" y2="10" stroke="#475569" stroke-width="1.5"/>
+      <text x="442" y="124" font-size="10" font-weight="bold" fill="#334155">x</text>
+      <text x="225" y="10" font-size="10" font-weight="bold" fill="#334155">y</text>
+      
+      <!-- Folded parabola y = |ax^2 + bx + c| -->
+      <path d="M 60 20 Q 110 120 145 120 Q 230 40 315 120 Q 350 120 400 20" fill="none" stroke="#2563eb" stroke-width="2.8"/>
+      
+      <!-- Ghost original below axis -->
+      <path d="M 145 120 Q 230 200 315 120" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>
+      
+      <!-- Line y = k -->
+      <line x1="30" y1="75" x2="430" y2="75" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="4,2"/>
+      <text x="432" y="72" font-size="10" font-weight="bold" fill="#dc2626">y = k</text>
+      
+      <!-- 4 intersection dots -->
+      <circle cx="85" cy="75" r="3.5" fill="#dc2626"/>
+      <circle cx="178" cy="75" r="3.5" fill="#dc2626"/>
+      <circle cx="282" cy="75" r="3.5" fill="#dc2626"/>
+      <circle cx="375" cy="75" r="3.5" fill="#dc2626"/>
+      <text x="85" y="65" font-size="9" font-weight="bold" text-anchor="middle" fill="#991b1b">x₁</text>
+      <text x="178" y="65" font-size="9" font-weight="bold" text-anchor="middle" fill="#991b1b">x₂</text>
+      <text x="282" y="65" font-size="9" font-weight="bold" text-anchor="middle" fill="#991b1b">x₃</text>
+      <text x="375" y="65" font-size="9" font-weight="bold" text-anchor="middle" fill="#991b1b">x₄</text>
+      
+      <!-- Apex of fold -->
+      <circle cx="230" cy="55" r="3" fill="#059669"/>
+      <text x="230" y="42" font-size="9" font-weight="bold" text-anchor="middle" fill="#047857">Peak = |D|/(4a)</text>
+      
+      <!-- Roots alpha, beta -->
+      <circle cx="145" cy="120" r="3" fill="#1e40af"/>
+      <text x="145" y="135" font-size="10" font-weight="bold" text-anchor="middle" fill="#1e40af">α</text>
+      <circle cx="315" cy="120" r="3" fill="#1e40af"/>
+      <text x="315" y="135" font-size="10" font-weight="bold" text-anchor="middle" fill="#1e40af">β</text>
+      
+      <text x="230" y="152" font-size="9" font-weight="bold" text-anchor="middle" fill="#1e293b">4 distinct roots when 0 &lt; k &lt; |D|/(4a)</text>
+    </svg>
+    """
+
+def generate_quadratic_svg_page8():
+    """Page 8 graphical view: Rational quadratic y = (x^2-x+1)/(x^2+x+1) bounded between y_min and y_max with asymptote."""
+    return """
+    <svg viewBox="0 0 460 160" class="w-full h-auto max-w-[450px] mx-auto select-none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="90" x2="440" y2="90" stroke="#475569" stroke-width="1.8"/>
+      <line x1="230" y1="150" x2="230" y2="10" stroke="#475569" stroke-width="1.5"/>
+      <text x="442" y="94" font-size="10" font-weight="bold" fill="#334155">x</text>
+      <text x="225" y="10" font-size="10" font-weight="bold" fill="#334155">y</text>
+      
+      <!-- Horizontal Asymptote y = 1 -->
+      <line x1="20" y1="80" x2="440" y2="80" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <text x="35" y="75" font-size="9" font-weight="bold" fill="#475569">Asymptote y = 1 (a₁/a₂)</text>
+      
+      <!-- Max bound y = 3 -->
+      <line x1="80" y1="30" x2="380" y2="30" stroke="#059669" stroke-width="1.2" stroke-dasharray="2,2"/>
+      <circle cx="160" cy="30" r="3.5" fill="#059669"/>
+      <text x="160" y="22" font-size="9" font-weight="bold" text-anchor="middle" fill="#047857">Max y = 3 (at x = -1)</text>
+      
+      <!-- Min bound y = 1/3 -->
+      <line x1="80" y1="125" x2="380" y2="125" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="2,2"/>
+      <circle cx="300" cy="125" r="3.5" fill="#dc2626"/>
+      <text x="300" y="142" font-size="9" font-weight="bold" text-anchor="middle" fill="#b91c1c">Min y = 1/3 (at x = 1)</text>
+      
+      <!-- Smooth rational curve -->
+      <path d="M 40 82 C 100 80, 130 30, 160 30 C 200 30, 250 125, 300 125 C 340 125, 380 80, 430 80" 
+            fill="none" stroke="#7c3aed" stroke-width="2.8"/>
+            
+      <text x="230" y="155" font-size="9" font-weight="bold" text-anchor="middle" fill="#1e3a8a">Real x ⟹ Discriminant D_x ≥ 0 ⟹ y ∈ [1/3, 3]</text>
+    </svg>
+    """
+
 # =========================================================================
-# ALL 6 PAGES TRANSCRIBED EXACTLY FROM USER'S IMAGES
+# ALL 8 PAGES TRANSCRIBED EXACTLY FROM USER'S IMAGES & HIGH-YIELD JEE CURRICULUM
 # =========================================================================
 
 QUADRATIC_SHEETS = [
@@ -774,6 +848,256 @@ QUADRATIC_SHEETS = [
                 "key_takeaway": "Strict adherence to the 3-part location of roots system avoids false parameter solutions."
             }
         ]
+    },
+
+    # ---------------------------------------------------------------------
+    # PAGE 7: Location of Roots (Advanced JEE Cases) & Modulus Quadratics
+    # ---------------------------------------------------------------------
+    {
+        "page_number": 7,
+        "sheet_title": "Location of Roots (Advanced) & Modulus Quadratics",
+        "chapter": "Quadratic Equations & Expressions",
+        "subject": "Mathematics",
+        "class_level": 11,
+        "ncert_ref": "Class 11, Chapter 5 • Sheet 7 of 8",
+        "importance": "Very High (JEE Advanced Core)",
+        "mnemonic_banner": "Roots separated by k ⟹ a·f(k) < 0 ... Discriminant check is redundant!",
+        "classification_heading": "2. Advanced Interval Bounding Conditions (for a > 0)",
+        "parameter_heading": "3. Modulus & Nested Quadratic Equations",
+        "important_points_heading": "6. Important Points & Theorems",
+        "introduction": "For JEE Advanced, location of roots extends to bounding roots strictly inside an open interval $(k_1, k_2)$, alternating root conditions across multiple intervals, and solving modulus quadratics $|ax^2 + bx + c| = k$ and $a x^2 + b|x| + c = 0$.",
+        "classification_cases": [
+            {
+                "badge": "(i) Both Roots Lie in (k₁, k₂)",
+                "title": "Both Roots Trapped in (k₁, k₂)",
+                "condition": "k₁ < α ≤ β < k₂",
+                "description": "Both roots are strictly between real constants $k_1$ and $k_2$.",
+                "range": "x \\in (k_1, k_2)",
+                "consequence": "Must satisfy ALL 4 conditions: (1) $D \\ge 0$, (2) $a f(k_1) > 0$, (3) $a f(k_2) > 0$, (4) $k_1 < -b/(2a) < k_2$."
+            },
+            {
+                "badge": "(ii) Exactly One Root in (k₁, k₂)",
+                "title": "Single Root in Interval",
+                "condition": "f(k₁) · f(k₂) < 0",
+                "description": "One root lies strictly inside $(k_1, k_2)$ while the other lies outside.",
+                "range": "\\alpha \\in (k_1, k_2) \\text{ or } \\beta \\in (k_1, k_2)",
+                "consequence": "Opposite signs of function values guarantee the graph cuts x-axis between $k_1$ and $k_2$. If $f(k_1) f(k_2) = 0$, test endpoints directly."
+            },
+            {
+                "badge": "(iii) Roots Separated by k₁ and k₂",
+                "title": "Both Constants Lie Between Roots",
+                "condition": "α < k₁ < k₂ < β",
+                "description": "Both real constants lie strictly between the two distinct real roots.",
+                "range": "k_1, k_2 \\in (\\alpha, \\beta)",
+                "consequence": "$a f(k_1) < 0$ and $a f(k_2) < 0$. (Notice: $D > 0$ is AUTOMATICALLY guaranteed; no need to check $D$!)."
+            }
+        ],
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Equations of Form |ax² + bx + c| = k",
+                "rules": [
+                    {"cond": "If k < 0", "res": "No real solutions (modulus is always non-negative)."},
+                    {"cond": "If k = 0", "res": "At most 2 roots (roots of $ax^2 + bx + c = 0$)."},
+                    {"cond": "If 0 < k < |D|/(4a)", "res": "Exactly 4 distinct real roots (line cuts folded parabola 4 times)."},
+                    {"cond": "If k = |D|/(4a)", "res": "Exactly 3 distinct real roots (line is tangent to the inverted vertex)."},
+                    {"cond": "If k > |D|/(4a)", "res": "Exactly 2 distinct real roots."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Equations of Form a x² + b|x| + c = 0",
+                "rules": [
+                    {"cond": "Substitution", "res": "Let $t = |x| \\ge 0 \\implies a t^2 + b t + c = 0$."},
+                    {"cond": "Each t > 0", "res": "Yields TWO real solutions: $x = \\pm t$."},
+                    {"cond": "Root t = 0", "res": "Yields ONE real solution: $x = 0$."},
+                    {"cond": "Root t < 0", "res": "Yields ZERO real solutions (discard extraneous negative roots)."}
+                ]
+            }
+        ],
+        "graphical_view": {
+            "title": "Location & Modulus Parabola Fold (Graphical View)",
+            "vertex_formula": "Peak of inverted vertex: $\\left(-\\frac{b}{2a}, \\frac{|D|}{4a}\\right)$ | $y = |ax^2+bx+c|$",
+            "observations": [
+                "The portion of the parabola below the x-axis ($D > 0$) is reflected upward across the x-axis.",
+                "Horizontal line $y = k$ cuts the folded curve in 0, 2, 3, or 4 points depending on $k$ relative to $|D|/(4a)$.",
+                "For $a f(k) < 0$, the parabola's vertex is guaranteed to be below the x-axis, making $D > 0$ unconditional."
+            ],
+            "svg_diagram": generate_quadratic_svg_page7()
+        },
+        "special_cases": {
+            "title": "4. Rapid Root Existence & Sign Theorems",
+            "cases": [
+                "If $a f(k) < 0$ for ANY real $k$, then $D = b^2 - 4ac > 0$ strictly (Roots are real and distinct without calculating $D$).",
+                "If $a$ and $c$ have opposite signs ($ac < 0$), then roots are ALWAYS real and distinct with opposite signs.",
+                "Descartes' Rule of Signs: Number of positive roots $\\le$ sign variations in $P(x)$; number of negative roots $\\le$ sign variations in $P(-x)$.",
+                "For $|x - \\alpha| + |x - \\beta| = k$: Minimum value of LHS is $|\\alpha - \\beta|$. If $k < |\\alpha - \\beta|$, no solution; if $k = |\\alpha - \\beta|$, infinite solutions in $[\\alpha, \\beta]$."
+            ],
+            "note": "Always check whether endpoint equality is permitted in intervals before closing brackets."
+        },
+        "important_points": [
+            "To prove roots are real, showing $f(k_1) f(k_2) < 0$ is often faster than computing $D = b^2 - 4ac$.",
+            "When roots are separated by $k$, $a f(k) < 0$ automatically ensures $D > 0$.",
+            "For $t = |x|$, never forget to restrict $t \\ge 0$; negative roots of the quadratic in $t$ are discarded.",
+            "In interval trapping ($k_1 < \\alpha \\le \\beta < k_2$), forgetting the vertex condition $-b/(2a) \\in (k_1, k_2)$ is the most common error.",
+            "If $f(x) = 0$ has roots $\\alpha, \\beta$, then $f(|x|) = 0$ has $2 \\times$ (number of positive roots) solutions if $0$ is not a root."
+        ],
+        "quick_tips": [
+            "✓ If $a f(k) < 0$, skip $D$ computation — $D > 0$ is guaranteed!",
+            "✓ For $|x|^2 - 5|x| + 6 = 0 \\implies t = 2, 3 \\implies x = \\pm 2, \\pm 3$ (4 real roots).",
+            "✓ Line $y = k$ gives exactly 3 roots for $|ax^2+bx+c|=k$ when $k = |D|/(4a)$.",
+            "✓ If $f(k_1) f(k_2) < 0$, exactly an odd number of roots (at least one) lie in $(k_1, k_2)$.",
+            "✓ Always test endpoints if intervals are closed $[k_1, k_2]$."
+        ],
+        "jee_focus_points": [
+            "Both roots strictly inside $(k_1, k_2)$.",
+            "Separation of roots by specified real numbers.",
+            "Number of solutions of $|f(x)| = k$ and $f(|x|) = k$.",
+            "Parameter value for exactly 3 distinct real roots.",
+            "Descartes' Rule of signs for polynomial roots."
+        ],
+        "traps_and_pitfalls": [
+            {
+                "trap": "Omitting the vertex condition $k_1 < -b/(2a) < k_2$ when trapping both roots.",
+                "why": "Conditions $D \\ge 0, a f(k_1) > 0, a f(k_2) > 0$ are satisfied even when BOTH roots lie outside the interval on the same side!",
+                "remedy": "Always enforce $k_1 < -b/(2a) < k_2$ alongside $a f(k_1) > 0, a f(k_2) > 0$, and $D \\ge 0$."
+            },
+            {
+                "trap": "Treating $t = |x|$ as unrestricted and claiming 4 roots when one $t < 0$.",
+                "why": "$|x| = t$ has real solutions if and only if $t \\ge 0$.",
+                "remedy": "Check the sign of each root $t$; only positive roots produce $x = \\pm t$."
+            }
+        ],
+        "examples": [
+            {
+                "title": "Roots Separated by Specified Numbers",
+                "problem": "Find all values of $a$ for which one root of the equation $(a - 5)x^2 - 2ax + a - 4 = 0$ is smaller than $1$ and the other root is greater than $2$.",
+                "approach": "Let $f(x) = (a - 5)x^2 - 2ax + a - 4$. Since $1$ and $2$ lie between the roots $\\alpha < 1 < 2 < \\beta$, we require $(a - 5) f(1) < 0$ and $(a - 5) f(2) < 0$.",
+                "solution": "1. Evaluate $f(1)$:\\n$f(1) = (a - 5)(1)^2 - 2a(1) + a - 4 = a - 5 - 2a + a - 4 = -9$.\\nCondition 1: $(a - 5) f(1) < 0 \\implies (a - 5)(-9) < 0 \\implies a - 5 > 0 \\implies a > 5$.\\n2. Evaluate $f(2)$:\\n$f(2) = (a - 5)(4) - 2a(2) + a - 4 = 4a - 20 - 4a + a - 4 = a - 24$.\\nCondition 2: $(a - 5) f(2) < 0 \\implies (a - 5)(a - 24) < 0 \\implies a \\in (5, 24)$.\\n3. Take intersection of $a > 5$ and $a \\in (5, 24)$:\\n$a \\in (5, 24)$.",
+                "key_takeaway": "When numbers lie between the roots, $(a - 5) f(k) < 0$ guarantees $D > 0$ unconditionally without extra discriminant calculations."
+            }
+        ]
+    },
+
+    # ---------------------------------------------------------------------
+    # PAGE 8: Range of Rational Quadratic Functions & Algebraic Optimization
+    # ---------------------------------------------------------------------
+    {
+        "page_number": 8,
+        "sheet_title": "Range of Rational Expressions & Advanced Transformations",
+        "chapter": "Quadratic Equations & Expressions",
+        "subject": "Mathematics",
+        "class_level": 11,
+        "ncert_ref": "Class 11, Chapter 5 • Sheet 8 of 8",
+        "importance": "Very High (JEE Advanced Core)",
+        "mnemonic_banner": "Cross-multiply... Set D_x ≥ 0 ... Check leading coefficient for asymptotes!",
+        "classification_heading": "2. Types of Rational Expressions & Range Determination",
+        "parameter_heading": "3. Advanced Root Transformations & Symmetries",
+        "important_points_heading": "6. Important Points & Theorems",
+        "introduction": "Determining the range of rational quadratic expressions $y = \\frac{a_1 x^2 + b_1 x + c_1}{a_2 x^2 + b_2 x + c_2}$ for real $x \\in \\mathbb{R}$ is among the most frequent JEE Advanced algebra topics. Cross-multiplying to form a quadratic in $x$ and enforcing $D_x \\ge 0$ yields the allowable values of $y$.",
+        "classification_cases": [
+            {
+                "badge": "(i) Linear / Quadratic (y = L(x) / Q(x))",
+                "title": "Linear over Quadratic",
+                "condition": "y (a₂ x² + b₂ x + c₂) - (a₁ x + b₁) = 0",
+                "description": "Cross-multiply to form $a_2 y x^2 + (b_2 y - a_1)x + (c_2 y - b_1) = 0$.",
+                "range": "D_x \\ge 0 \\implies y \\in [y_{min}, y_{max}]",
+                "consequence": "Always test $y = 0$ separately (horizontal asymptote as $x \\to \\pm \\infty$)."
+            },
+            {
+                "badge": "(ii) Quadratic / Quadratic (No Common Factor)",
+                "title": "Quadratic over Quadratic",
+                "condition": "(a₂ y - a₁)x² + (b₂ y - b₁)x + (c₂ y - c₁) = 0",
+                "description": "For $x \\in \\mathbb{R}$, discriminant $D_x = (b_2 y - b_1)^2 - 4(a_2 y - a_1)(c_2 y - c_1) \\ge 0$.",
+                "range": "y \\in [y_1, y_2] \\text{ or } y \\in (-\\infty, y_1] \\cup [y_2, \\infty)",
+                "consequence": "Examine $y = a_1/a_2$ (when coefficient of $x^2$ vanishes) to see if it corresponds to a real $x$."
+            },
+            {
+                "badge": "(iii) Rational Expression with Common Factor",
+                "title": "Punctured Rational Curve",
+                "condition": "Common factor (x - α) cancels",
+                "description": "If numerator and denominator share factor $(x - \\alpha)$, simplify to linear fractional.",
+                "range": "y \\in \\mathbb{R} \\setminus \\{y_0\\}",
+                "consequence": "The cancelled point $x = \\alpha$ produces a hole (puncture). The value $y_0 = f(\\alpha)$ must be excluded from the range."
+            }
+        ],
+        "parameter_analysis": [
+            {
+                "sub_badge": "(i) Transformation of Roots (New Equation Formation)",
+                "rules": [
+                    {"cond": "Roots α + k, β + k", "res": "Replace $x$ with $x - k$ in $ax^2 + bx + c = 0$."},
+                    {"cond": "Roots kα, kβ", "res": "Replace $x$ with $x/k$ in $ax^2 + bx + c = 0$."},
+                    {"cond": "Roots 1/α, 1/β", "res": "Replace $x$ with $1/x \\implies c x^2 + b x + a = 0$."},
+                    {"cond": "Roots α², β²", "res": "Write $a x^2 + c = -b x$, square both sides: $(a x^2 + c)^2 = b^2 x^2$, then substitute $y = x^2$."},
+                    {"cond": "Roots -α, -β", "res": "Replace $x$ with $-x \\implies a x^2 - b x + c = 0$."}
+                ]
+            },
+            {
+                "sub_badge": "(ii) Quadratic Optimization on a Closed Interval [p, q]",
+                "rules": [
+                    {"cond": "If Vertex -b/(2a) ∈ [p, q]", "res": "Evaluate $f(p), f(q),$ and $f(-b/(2a))$. Maximum is the greatest, minimum is the least."},
+                    {"cond": "If Vertex -b/(2a) ∉ [p, q]", "res": "Function is strictly monotonic on $[p, q]$. Extrema occur ONLY at the endpoints $f(p)$ and $f(q)$."}
+                ]
+            }
+        ],
+        "graphical_view": {
+            "title": "Rational Quadratic Function & Asymptotes (Graphical View)",
+            "vertex_formula": "y = (x² - x + 1)/(x² + x + 1) | Range: [1/3, 3] | Asymptote: y = 1",
+            "observations": [
+                "Denominator $x^2 + x + 1 > 0$ for all real $x$ ($D < 0$), so curve is continuous everywhere without vertical asymptotes.",
+                "Horizontal asymptote $y = a_1/a_2 = 1$ is approached as $x \\to \\pm \\infty$ and crossed at $x = 0$.",
+                "Global minimum $y = 1/3$ occurs at $x = 1$; global maximum $y = 3$ occurs at $x = -1$."
+            ],
+            "svg_diagram": generate_quadratic_svg_page8()
+        },
+        "special_cases": {
+            "title": "4. Special Range Theorems & Hole Removals",
+            "cases": [
+                "Leading Coefficient Check: When setting $D_x \\ge 0$, always check if the leading coefficient $(a_2 y - a_1) = 0$. If $y = a_1/a_2$, the equation becomes linear and may yield a real $x$.",
+                "If denominator $Q_2(x) > 0$ for all real $x$ ($a_2 > 0, D_2 < 0$), the function has NO vertical asymptotes and is continuous everywhere on $\\mathbb{R}$.",
+                "If the quadratic expression is a perfect square, the range is $[0, \\infty)$ or $(-\\infty, 0]$.",
+                "For $x > 0$, $x + 1/x \\ge 2$ (equality at $x = 1$); for $x < 0$, $x + 1/x \\le -2$ (equality at $x = -1$)."
+            ],
+            "note": "Always verify whether the horizontal asymptote value $y = a_1/a_2$ is attained for a finite real $x$!"
+        },
+        "important_points": [
+            "Discriminant method for range applies ONLY when $x$ can take all real values in the domain.",
+            "Always test $y = a_1/a_2$ separately when the coefficient of $x^2$ vanishes.",
+            "Punctured points (holes) caused by cancelled common factors must be removed from the range.",
+            "For restricted intervals $[p, q]$, always compare $f(p), f(q)$ and $f(-b/2a)$ (if in interval).",
+            "If numerator and denominator share a root, the degree drops and range excludes the value at the hole."
+        ],
+        "quick_tips": [
+            "✓ For $y = \\frac{x^2 - x + 1}{x^2 + x + 1}$, cross-multiply, set $D_x \\ge 0 \\implies y \\in [1/3, 3]$.",
+            "✓ If $x$ is real, $D_x \\ge 0$ is the master key for quadratic rational ranges.",
+            "✓ If roots are squared (\\alpha^2, \\beta^2), write $a x^2 + c = -b x \\implies (a x^2 + c)^2 = b^2 x^2$.",
+            "✓ To find $\\alpha^4 + \\beta^4$, use Newton sums $S_4 = -b/a S_3 - c/a S_2$."
+        ],
+        "jee_focus_points": [
+            "Range of $y = \\frac{a_1 x^2 + b_1 x + c_1}{a_2 x^2 + b_2 x + c_2}$ for $x \\in \\mathbb{R}$.",
+            "Finding range when numerator and denominator have a common factor.",
+            "Restricted domain extrema $[p, q]$.",
+            "Transformation of equations to find symmetric polynomials."
+        ],
+        "traps_and_pitfalls": [
+            {
+                "trap": "Assuming $y = a_1/a_2$ cannot be in the range.",
+                "why": "When $y = a_1/a_2$, the $x^2$ term vanishes and leaves a linear equation in $x$. If that linear equation has a real solution, $a_1/a_2$ IS in the range!",
+                "remedy": "Explicitly substitute $y = a_1/a_2$ into the cross-multiplied equation and check if a real $x$ exists."
+            },
+            {
+                "trap": "Forgetting to exclude $y$-values corresponding to cancelled holes $(x - \\alpha) = 0$.",
+                "why": "The original function is undefined at $x = \\alpha$.",
+                "remedy": "Calculate $y_0 = \\text{lim}_{x \\to \\alpha} f(x)$ and remove $y_0$ from the final range."
+            }
+        ],
+        "examples": [
+            {
+                "title": "Complete Range of Rational Quadratic Expression",
+                "problem": "Find the complete range of the rational expression $y = \\frac{x^2 - 3x + 4}{x^2 + 3x + 4}$ for all real $x \\in \\mathbb{R}$.",
+                "approach": "Cross-multiply to formulate a quadratic in $x$: $(y - 1)x^2 + 3(y + 1)x + 4(y - 1) = 0$. Enforce real $x \\implies D_x \\ge 0$, and test $y = 1$ separately.",
+                "solution": "1. If $y = 1$:\\n$0 \\cdot x^2 + 3(2)x + 0 = 0 \\implies 6x = 0 \\implies x = 0 \\in \\mathbb{R}$. Thus $y = 1$ is in the range.\\n2. If $y \\ne 1$, quadratic in $x$ must have real roots ($D_x \\ge 0$):\\n$D_x = [3(y + 1)]^2 - 4(y - 1)[4(y - 1)] \\ge 0$\\n$9(y^2 + 2y + 1) - 16(y^2 - 2y + 1) \\ge 0$\\n$9y^2 + 18y + 9 - 16y^2 + 32y - 16 \\ge 0$\\n$-7y^2 + 50y - 7 \\ge 0 \\implies 7y^2 - 50y + 7 \\le 0$\\n$(7y - 1)(y - 7) \\le 0 \\implies y \\in [1/7, 7]$.\\n3. Since $y = 1 \\in [1/7, 7]$, the complete range is $y \\in [1/7, 7]$.",
+                "key_takeaway": "Always verify the coefficient of $x^2$ ($y = 1$); here $x = 0$ confirms $y = 1$ is attainable."
+            }
+        ]
     }
 ]
 
@@ -784,3 +1108,4 @@ def get_quadratic_full_notes():
     main_note["sheets"] = QUADRATIC_SHEETS
     main_note["total_pages"] = len(QUADRATIC_SHEETS)
     return main_note
+
