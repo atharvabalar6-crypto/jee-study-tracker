@@ -217,6 +217,8 @@ def api_overall_analytics():
     })
 
 if __name__ == "__main__":
-    print("Starting JEE Study Tracker & Adaptive Testing Engine on http://localhost:5000 ...")
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    debug_mode = os.environ.get("FLASK_DEBUG", "False").lower() in ("true", "1")
+    print(f"Starting JEE Study Tracker & Adaptive Testing Engine on port {port} ...")
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
 
