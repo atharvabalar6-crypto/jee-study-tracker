@@ -1,5 +1,8 @@
 # JEE Mains & Advanced Study Tracker & Adaptive Diagnostic Test Engine
 
+> 🌐 **Live Web Application (Hosted on GitHub Pages):**  
+> **[https://atharvabalar6-crypto.github.io/jee-study-tracker/](https://atharvabalar6-crypto.github.io/jee-study-tracker/)**
+
 A web-based study tracker and adaptive testing engine tailored specifically for **JEE Mains & Advanced** aspirants.
 
 ---
